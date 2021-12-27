@@ -68,7 +68,7 @@ internal class FilePreview(
     private fun loadFile(){
         //tbs只能加载本地文件 如果是网络文件则先下载
         if (path.startsWith("http")) {
-            FileUtils.downLoadFile(path,object : FileUtils.DownloadCallback{
+            FileUtils.downLoadFile(activity,path,object : FileUtils.DownloadCallback{
                 override fun onProgress(progress: Int) {
 
                 }

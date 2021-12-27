@@ -1,5 +1,6 @@
 package com.gstory.file_preview.utils
 
+import android.content.Context
 import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
@@ -20,8 +21,11 @@ import java.io.InputStream
 
 object FileUtils {
 
-    fun getDir(): File {
-        val dir = File(Environment.getExternalStorageDirectory().absolutePath, "file_preview")
+    /**
+     * 获取缓存目录
+     */
+    fun getDir(context: Context): File {
+        val dir = File(context.filesDir, "file_preview")
         if (!dir.exists()) {
             dir.mkdirs()
         }
@@ -48,7 +52,7 @@ object FileUtils {
     /**
      * 下载文件
      */
-    fun downLoadFile(url:String,callback: DownloadCallback){
+    fun downLoadFile(context: Context,url:String,callback: DownloadCallback){
         val request = Request.Builder().url(url).build();
         OkHttpClient().newCall(request).enqueue(object : Callback {
 
@@ -68,7 +72,7 @@ object FileUtils {
                     val total = response.body?.contentLength() ?: 1
                     var filename = url.substring(url.lastIndexOf('/')+1);
                     saveFile =
-                            File(FileUtils.getDir().toString() + File.separator + filename)
+                            File(FileUtils.getDir(context).toString() + File.separator + filename)
                     if (saveFile.exists())saveFile.delete()
                     fos = FileOutputStream(saveFile)
                     var sum = 0
