@@ -1,5 +1,7 @@
 # Flutter文档预览插件
 
+<img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%"><img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">
+
 ## 简介
 
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、ppt、pptx、xls、xlsx、pdf等文件。
