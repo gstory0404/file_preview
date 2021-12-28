@@ -1,7 +1,6 @@
 package com.gstory.file_preview.utils
 
 import android.content.Context
-import android.os.Environment
 import android.text.TextUtils
 import android.util.Log
 import okhttp3.Callback
@@ -32,31 +31,37 @@ object FileUtils {
         return dir
     }
 
+    /**
+     * 获取文件格式
+     */
     fun getFileType(paramString: String): String? {
         var str = ""
         if (TextUtils.isEmpty(paramString)) {
-            Log.d("FileUtils", "paramString---->null")
             return str
         }
-        Log.d("FileUtils", "paramString:$paramString")
         val i = paramString.lastIndexOf('.')
         if (i <= -1) {
-            Log.d("FileUtils", "i <= -1")
             return str
         }
         str = paramString.substring(i + 1)
-        Log.d("FileUtils", "paramString.substring(i + 1)------>$str")
+        Log.d("FileUtils", "当前文件格式$str")
         return str
     }
 
     /**
      * 下载文件
      */
-    fun downLoadFile(context: Context,url:String,callback: DownloadCallback){
+    fun downLoadFile(context: Context, url: String, callback: DownloadCallback) {
+        var filename = url.substring(url.lastIndexOf('/') + 1)
+        var saveFile =
+                File(FileUtils.getDir(context).toString() + File.separator + filename)
+        //如果文件存在 不再下载 直接读取展示
+        if (saveFile.exists()) {
+            callback.onFinish(saveFile)
+            return
+        }
         val request = Request.Builder().url(url).build();
         OkHttpClient().newCall(request).enqueue(object : Callback {
-
-
             override fun onFailure(call: okhttp3.Call, e: IOException) {
                 callback.onFail(e.toString())
             }
@@ -66,18 +71,13 @@ object FileUtils {
                 val buf = ByteArray(2048)
                 var len = 0
                 var fos: FileOutputStream? = null
-                var saveFile:File? = null
                 try {
                     `is` = response.body?.byteStream()
                     val total = response.body?.contentLength() ?: 1
-                    var filename = url.substring(url.lastIndexOf('/')+1);
-                    saveFile =
-                            File(FileUtils.getDir(context).toString() + File.separator + filename)
-                    if (saveFile.exists())saveFile.delete()
                     fos = FileOutputStream(saveFile)
                     var sum = 0
                     while ((`is`?.read(buf).also { len = it ?: 0 }) != -1) {
-                        fos?.write(buf,0,len)
+                        fos.write(buf, 0, len)
                         sum += len
                         val progress = (sum * 1f / total * 100).toInt()
                         //下载进度
@@ -87,18 +87,18 @@ object FileUtils {
                     // 下载完成
                     callback.onFinish(saveFile)
 
-                }catch (e:Exception){
+                } catch (e: Exception) {
                     e.printStackTrace()
                     callback.onFail(e.toString())
-                }finally {
+                } finally {
                     try {
                         `is`?.close()
-                    }catch (e: IOException){
+                    } catch (e: IOException) {
                         e.printStackTrace()
                     }
                     try {
                         fos?.close()
-                    }catch (e: IOException){
+                    } catch (e: IOException) {
                         e.printStackTrace()
                     }
                 }
@@ -106,9 +106,9 @@ object FileUtils {
         })
     }
 
-    interface DownloadCallback{
-        fun onProgress(progress:Int)
-        fun onFail(msg:String)
+    interface DownloadCallback {
+        fun onProgress(progress: Int)
+        fun onFail(msg: String)
         fun onFinish(file: File)
     }
 }

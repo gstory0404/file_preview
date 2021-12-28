@@ -38,7 +38,7 @@ class _FilePreviewWidgetState extends State<FilePreviewWidget> {
         child: AndroidView(
           viewType: _viewType,
           creationParams: {
-            "widget": widget.width,
+            "width": widget.width,
             "height": widget.height,
             "path": widget.path,
           },
@@ -53,7 +53,7 @@ class _FilePreviewWidgetState extends State<FilePreviewWidget> {
         child: UiKitView(
           viewType: _viewType,
           creationParams: {
-            "widget": widget.width,
+            "width": widget.width,
             "height": widget.height,
             "path": widget.path,
           },

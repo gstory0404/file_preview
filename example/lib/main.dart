@@ -1,3 +1,7 @@
+import 'dart:io';
+
+import 'package:file_picker/file_picker.dart';
+import 'package:file_preview_example/file_preview_page.dart';
 import 'package:flutter/material.dart';
 import 'dart:async';
 
@@ -5,33 +9,160 @@ import 'package:flutter/services.dart';
 import 'package:file_preview/file_preview.dart';
 
 void main() {
-  runApp(const MyApp());
+  runApp(MyApp());
 }
 
-class MyApp extends StatefulWidget {
-  const MyApp({Key? key}) : super(key: key);
-
-  @override
-  State<MyApp> createState() => _MyAppState();
-}
-
-class _MyAppState extends State<MyApp> {
-
-  @override
-  void initState() {
-    super.initState();
-  }
-
-
+class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      home: Scaffold(
-        appBar: AppBar(
-          title: const Text('Plugin example app'),
-        ),
-        body: Center(
-          child: Text('Running on: $_platformVersion\n'),
+      home: HomePage(),
+    );
+  }
+}
+
+class HomePage extends StatefulWidget {
+  @override
+  _HomePageState createState() => _HomePageState();
+}
+
+class _HomePageState extends State<HomePage> {
+  @override
+  void initState() {
+    _initTBS();
+    super.initState();
+  }
+
+  void _initTBS() async {
+    await FilePreview.initTBS();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: const Text('File Preview'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('在线docx预览'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const FilePreviewPage(
+                        title: "docx预览",
+                        path:
+                            "https://gstory.vercel.app/ceshi/ceshi.docx",
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('在线pdf预览'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const FilePreviewPage(
+                        title: "在线pdf预览",
+                        path: "https://gstory.vercel.app/ceshi/ceshi.pdf",
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('在线xlsx预览'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const FilePreviewPage(
+                        title: "在线xlsx预览",
+                        path:
+                            "https://gstory.vercel.app/ceshi/ceshi.xlsx",
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('在线txt预览'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const FilePreviewPage(
+                        title: "在线txt预览",
+                        path:
+                        "https://gstory.vercel.app/ceshi/ceshi.txt",
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('在线ppt预览'),
+              onPressed: () async {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (_) {
+                      return const FilePreviewPage(
+                        title: "在线pdf预览",
+                        path: "https://gstory.vercel.app/ceshi/ceshi.pptx",
+                      );
+                    },
+                  ),
+                );
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('本地文件预览'),
+              onPressed: () async {
+                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                if (result != null) {
+                  File file = File(result.files.single.path!);
+                  Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                      builder: (_) {
+                        return FilePreviewPage(
+                          title: "本地文件预览",
+                          path: file.path,
+                        );
+                      },
+                    ),
+                  );
+                }
+              },
+            ),
+          ],
         ),
       ),
     );
