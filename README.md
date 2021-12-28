@@ -11,24 +11,24 @@
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、ppt、pptx、xls、xlsx、pdf等文件。
 
 ## 说明
-andorid使用腾讯TBS服务，支持doc、docx、ppt、pptx、xls、xlsx、pdf、txt、epub文件的预览
-ios使用WKWebView，WKWebView所支持的均可预览
+* andorid使用腾讯TBS服务，支持doc、docx、ppt、pptx、xls、xlsx、pdf、txt、epub文件的预览
+* ios使用WKWebView，WKWebView所支持的均可预览
 
 ## 版本更新
 
 [更新日志](https://github.com/gstory0404/file_preview/blob/master/CHANGELOG.md)
 
 ## 集成步骤
-#### 1、pubspec.yaml
+### 1、pubspec.yaml
 ```Dart
 file_preview: ^0.0.2
 ```
-#### 2、引入
+### 2、引入
 ```Dart
 import 'package:file_preview/file_preview.dart';
 ```
 
-#### 3、使用
+### 3、使用
 由于使用android使用TBS服务，所以必须在FilePreviewWidget使用前完成初始化，不然无法加载。
 如本地无TBS不存在会在初始化时进行下载，会耗时
 ```dart
@@ -44,8 +44,9 @@ await FilePreview.initTBS();
         )
 ```
 
-#### 4、http配置
-Android
+### 4、http配置
+
+* Android
 
 android/app/src/main/res/xml下新建network_config.xml
 ```
@@ -61,7 +62,8 @@ android/app/src/main/res/xml下新建network_config.xml
        android:networkSecurityConfig="@xml/network_config">
 ```
 
-ios
+* ios
+
 ios/Runner/Info.plist中
 ```
  <key>NSAppTransportSecurity</key>
