@@ -1,6 +1,10 @@
 # Flutter文档预览插件
 
-<img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%"><img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">
+<p>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v0.0.2-success></a>
+</p>
+
+<img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
 
 ## 简介
 
