@@ -14,5 +14,8 @@ public class SwiftFilePreviewPlugin: NSObject, FlutterPlugin {
         if(call.method == "initTBS"){
             result(true)
         }
+        else if(call.method == "tbsVersion"){
+            result("0")
+        }
     }
 }

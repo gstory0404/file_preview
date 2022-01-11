@@ -10,8 +10,12 @@ part 'file_preview_widget.dart';
 class FilePreview {
   static const MethodChannel _channel = MethodChannel('file_preview');
 
-  static Future<bool?> initTBS() async {
-    final bool? init = await _channel.invokeMethod('initTBS');
+  static Future<bool> initTBS() async {
+    final bool init = await _channel.invokeMethod('initTBS');
     return init;
+  }
+
+  static Future<String> tbsVersion() async {
+    return await _channel.invokeMethod('tbsVersion');
   }
 }

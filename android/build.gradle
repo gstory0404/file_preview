@@ -47,6 +47,6 @@ android {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.tencent.tbs:tbssdk:44115'
+    implementation 'com.tencent.tbs:tbssdk:44136'
     implementation 'com.squareup.okhttp3:okhttp:4.9.1'
 }

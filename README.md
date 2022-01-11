@@ -1,7 +1,7 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v0.0.2-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v0.0.3-success></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
@@ -21,7 +21,7 @@
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^0.0.2
+file_preview: ^0.0.3
 ```
 ### 2、引入
 ```Dart
@@ -30,9 +30,22 @@ import 'package:file_preview/file_preview.dart';
 
 ### 3、使用
 由于使用android使用TBS服务，所以必须在FilePreviewWidget使用前完成初始化，不然无法加载。
-如本地无TBS不存在会在初始化时进行下载，会耗时
+如本地无TBS不存在会在初始化时进行下载，会耗时30秒左右
 ```dart
 await FilePreview.initTBS();
+```
+
+andorid在build.gradle中开启删除无用资源，打包后可能导致apk无法加载TBS内核库失败，可以如下设置
+```dart
+buildTypes {
+        release {
+            //关闭删除无用资源
+            shrinkResources false
+            //关闭删除无用代码
+            minifyEnabled false
+            zipAlignEnabled true
+        }
+    }
 ```
 
 使用

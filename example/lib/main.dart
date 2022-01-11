@@ -27,6 +27,10 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
+
+  bool? isInit;
+  String? version;
+
   @override
   void initState() {
     _initTBS();
@@ -34,7 +38,13 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initTBS() async {
-    await FilePreview.initTBS();
+    isInit = await FilePreview.initTBS();
+    version = await FilePreview.tbsVersion();
+    if(mounted){
+      setState(() {
+
+      });
+    }
   }
 
   @override
@@ -47,6 +57,8 @@ class _HomePageState extends State<HomePage> {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
+            Text('TBS初始化 $isInit'),
+            Text('TBS版本号 $version'),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,

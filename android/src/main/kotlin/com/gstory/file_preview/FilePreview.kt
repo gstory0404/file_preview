@@ -106,6 +106,8 @@ internal class FilePreview(
             val bool = tbsReaderView.preOpen(FileUtils.getFileType(file.toString()), false)
             if (bool) {
                 tbsReaderView.openFile(localBundle)
+            }else{
+                Log.e(TAG, "文件打开失败！")
             }
         } else {
             Log.e(TAG, "文件路径无效！")
