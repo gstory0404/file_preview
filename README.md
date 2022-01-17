@@ -34,6 +34,7 @@ import 'package:file_preview/file_preview.dart';
 如本地无TBS不存在会在初始化时进行下载，会耗时30秒左右
 
 #### 1、 手动初始化
+如本地无TBS不存在会在初始化时进行下载，会耗时3-30秒左右
 ```dart
 await FilePreview.initTBS();
 ```
