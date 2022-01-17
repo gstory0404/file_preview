@@ -38,7 +38,7 @@ import 'package:file_preview/file_preview.dart';
 await FilePreview.initTBS();
 ```
 
-#### 2、异步初始化，无序在flutter中await等待
+#### 2、异步初始化，无需在flutter中await等待
 
 android目录下新建App继承FilePreviewApp
 ```dart
