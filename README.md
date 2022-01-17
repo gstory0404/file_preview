@@ -1,7 +1,7 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v0.0.3-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.0.0-success></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
@@ -21,20 +21,42 @@
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^0.0.3
+file_preview: ^1.0.0
 ```
 ### 2、引入
 ```Dart
 import 'package:file_preview/file_preview.dart';
 ```
 
-### 3、使用
+### 3、TBS初始化
+
 由于使用android使用TBS服务，所以必须在FilePreviewWidget使用前完成初始化，不然无法加载。
 如本地无TBS不存在会在初始化时进行下载，会耗时30秒左右
+
+#### 1、 手动初始化
 ```dart
 await FilePreview.initTBS();
 ```
 
+#### 2、异步初始化，无序在flutter中await等待
+
+android目录下新建App继承FilePreviewApp
+```dart
+
+class App : FilePreviewApp() {
+}
+```
+AndroidManifest.xml文件中修改
+```dart
+   <application
+        ...
+        android:name=".App"
+        ...>
+    </application>
+```
+
+
+### 3、使用
 andorid在build.gradle中开启删除无用资源，打包后可能导致apk无法加载TBS内核库失败，可以如下设置
 ```dart
 buildTypes {
@@ -50,11 +72,19 @@ buildTypes {
 
 使用
 ```dart
- FilePreviewWidget(
-          width: 400,//宽
-          height: 700,//高
-          path: "",//本地路径或者http链接
-        )
+  //使用前进行判断是否已经初始化
+    var isInit = await FilePreview.tbsHasInit();
+    if (!isInit) {
+        await FilePreview.initTBS();
+        return;
+    }
+```
+```dart
+     FilePreviewWidget(
+              width: 400,//宽
+              height: 700,//高
+              path: "",//file path or http url
+            )
 ```
 
 ### 4、http配置

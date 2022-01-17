@@ -27,23 +27,28 @@ class HomePage extends StatefulWidget {
 }
 
 class _HomePageState extends State<HomePage> {
-
-  bool? isInit;
+  bool isInit = false;
   String? version;
 
   @override
   void initState() {
-    _initTBS();
+    _tbsVersion();
+    // _initTBS();
     super.initState();
   }
 
   void _initTBS() async {
     isInit = await FilePreview.initTBS();
-    version = await FilePreview.tbsVersion();
-    if(mounted){
-      setState(() {
+    if (mounted) {
+      setState(() {});
+    }
+  }
 
-      });
+  void _tbsVersion() async {
+    version = await FilePreview.tbsVersion();
+    isInit = await FilePreview.tbsHasInit();
+    if (mounted) {
+      setState(() {});
     }
   }
 
@@ -64,14 +69,20 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               child: const Text('在线docx预览'),
               onPressed: () async {
+                isInit = await FilePreview.tbsHasInit();
+                setState(() {});
+                if (!isInit) {
+                  _initTBS();
+                  return;
+                }
+
                 Navigator.push(
                   context,
                   MaterialPageRoute(
                     builder: (_) {
                       return const FilePreviewPage(
                         title: "docx预览",
-                        path:
-                            "https://gstory.vercel.app/ceshi/ceshi.docx",
+                        path: "https://gstory.vercel.app/ceshi/ceshi.docx",
                       );
                     },
                   ),
@@ -107,8 +118,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (_) {
                       return const FilePreviewPage(
                         title: "在线xlsx预览",
-                        path:
-                            "https://gstory.vercel.app/ceshi/ceshi.xlsx",
+                        path: "https://gstory.vercel.app/ceshi/ceshi.xlsx",
                       );
                     },
                   ),
@@ -126,8 +136,7 @@ class _HomePageState extends State<HomePage> {
                     builder: (_) {
                       return const FilePreviewPage(
                         title: "在线txt预览",
-                        path:
-                        "https://gstory.vercel.app/ceshi/ceshi.txt",
+                        path: "https://gstory.vercel.app/ceshi/ceshi.txt",
                       );
                     },
                   ),
@@ -157,7 +166,8 @@ class _HomePageState extends State<HomePage> {
               textColor: Colors.white,
               child: const Text('本地文件预览'),
               onPressed: () async {
-                FilePickerResult? result = await FilePicker.platform.pickFiles();
+                FilePickerResult? result =
+                    await FilePicker.platform.pickFiles();
                 if (result != null) {
                   File file = File(result.files.single.path!);
                   Navigator.push(

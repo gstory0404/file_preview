@@ -29,7 +29,10 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mActivity = binding.activity
-        mFlutterPluginBinding?.platformViewRegistry?.registerViewFactory("com.gstory.file_preview/FilePreviewWidget", FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!))
+        mFlutterPluginBinding?.platformViewRegistry?.registerViewFactory(
+            "com.gstory.file_preview/FilePreviewWidget",
+            FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
+        )
 
     }
 
@@ -57,56 +60,20 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         if (call.method == "initTBS") {
-            //禁用隐私API的获取
-            QbSdk.disableSensitiveApi()
-            //BS内核首次使用和加载时，ART虚拟机会将Dex文件转为Oat，该过程由系统底层触发且耗时较长，很容易引起anr问题，解决方法是使用TBS的 ”dex2oat优化方案“。
-            // 在调用TBS初始化、创建WebView之前进行如下配置
-            val map: HashMap<String, Any> = HashMap()
-            map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
-            map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
-            QbSdk.initTbsSettings(map)
-            QbSdk.setDownloadWithoutWifi(true)
-            val cb: PreInitCallback = object : PreInitCallback {
-                override fun onViewInitFinished(arg0: Boolean) {
-                    //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                    Log.e("TBS内核", "onViewInitFinished:$arg0")
-                    if (arg0) {
+            if (TbsManager.instance.isInit) {
+                result.success(true)
+            } else {
+                TbsManager.instance.initTBS(applicationContext!!, object : InitCallBack {
+                    override fun initFinish(b: Boolean) {
                         mActivity?.runOnUiThread {
-                            result.success(true)
+                            result.success(b)
                         }
-                    } else {
-                        QbSdk.disableSensitiveApi()
-                        val map: HashMap<String, Any> = HashMap()
-                        map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
-                        map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
-                        QbSdk.initTbsSettings(map)
-                        QbSdk.setDownloadWithoutWifi(true)
-                        QbSdk.reset(applicationContext)
                     }
-                }
-
-                override fun onCoreInitFinished() {
-                    Log.e("TBS内核", "onCoreInitFinished")
-                }
+                })
             }
-            //x5内核初始化接口
-            QbSdk.initX5Environment(applicationContext, cb)
-            QbSdk.setTbsListener(object : TbsListener {
-                override fun onDownloadFinish(i: Int) {
-                    //tbs内核下载完成回调
-                    Log.e("TBS内核", "下载完成")
-                }
+        } else if (call.method == "tbsHasInit") {
+            result.success(TbsManager.instance.isInit)
 
-                override fun onInstallFinish(i: Int) {
-                    //内核安装完成回调，
-                    Log.e("TBS内核", "安装完成")
-                }
-
-                override fun onDownloadProgress(i: Int) {
-                    //下载进度监听
-                    Log.e("TBS内核", "下载进度 $i")
-                }
-            })
         } else if (call.method == "tbsVersion") {
             result.success(QbSdk.getTbsVersion(applicationContext).toString())
         }

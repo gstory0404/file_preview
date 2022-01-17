@@ -15,6 +15,10 @@ class FilePreview {
     return init;
   }
 
+  static Future<bool> tbsHasInit() async {
+    return await _channel.invokeMethod('tbsHasInit');
+  }
+
   static Future<String> tbsVersion() async {
     return await _channel.invokeMethod('tbsVersion');
   }

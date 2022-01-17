@@ -7,7 +7,7 @@
     <uses-permission android:name="android.permission.READ_PHONE_STATE" />
    <application
         android:label="file_preview_example"
-        android:name="${applicationName}"
+        android:name=".App"
         android:icon="@mipmap/ic_launcher"
        android:networkSecurityConfig="@xml/network_config">
         <activity
