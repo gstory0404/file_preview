@@ -31,10 +31,10 @@ import 'package:file_preview/file_preview.dart';
 ### 3、TBS初始化
 
 由于使用android使用TBS服务，所以必须在FilePreviewWidget使用前完成初始化，不然无法加载。
-如本地无TBS不存在会在初始化时进行下载，会耗时30秒左右
-
-#### 1、 手动初始化
 如本地无TBS不存在会在初始化时进行下载，会耗时3-30秒左右
+
+以下二选一，自动初始化失败时可进行手动初始化
+#### 1、 手动初始化
 ```dart
 await FilePreview.initTBS();
 ```
