@@ -18,6 +18,10 @@
 
 [更新日志](https://github.com/gstory0404/file_preview/blob/master/CHANGELOG.md)
 
+## 常见问题
+1、TBS初始化失败  
+https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz 
+
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
