@@ -17,5 +17,11 @@ public class SwiftFilePreviewPlugin: NSObject, FlutterPlugin {
         else if(call.method == "tbsVersion"){
             result("0")
         }
+        else if(call.method == "tbsHasInit"){
+            result(true)
+        }
+        else if(call.method == "deleteCache"){
+            result(true)
+        }
     }
 }

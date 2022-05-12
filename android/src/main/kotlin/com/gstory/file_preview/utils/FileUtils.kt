@@ -32,6 +32,21 @@ object FileUtils {
     }
 
     /**
+     * 删除缓存文件夹
+     */
+    fun deleteCache(context: Context,dir: File) {
+        if (!dir.exists() || !dir.isDirectory) {
+            return
+        }
+        for (file in dir.listFiles()!!) {
+            if (file.isFile) file.delete()
+            else if (file.isDirectory) deleteCache(context,file)
+        }
+        dir.delete()
+    }
+
+
+    /**
      * 获取文件格式
      */
     fun getFileType(paramString: String): String? {
@@ -54,7 +69,7 @@ object FileUtils {
     fun downLoadFile(context: Context, url: String, callback: DownloadCallback) {
         var filename = url.substring(url.lastIndexOf('/') + 1)
         var saveFile =
-                File(FileUtils.getDir(context).toString() + File.separator + filename)
+            File(FileUtils.getDir(context).toString() + File.separator + filename)
         //如果文件存在 不再下载 直接读取展示
         if (saveFile.exists()) {
             callback.onFinish(saveFile)

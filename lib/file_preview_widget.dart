@@ -9,12 +9,14 @@ class FilePreviewWidget extends StatefulWidget {
   final double width;
   final double height;
   final String path;
+  FilePreviewCallBack? callBack;
 
-  const FilePreviewWidget(
+  FilePreviewWidget(
       {Key? key,
       required this.width,
       required this.height,
-      required this.path})
+      required this.path,
+      this.callBack})
       : super(key: key);
 
   @override
@@ -22,7 +24,7 @@ class FilePreviewWidget extends StatefulWidget {
 }
 
 class _FilePreviewWidgetState extends State<FilePreviewWidget> {
-  String _viewType = "com.gstory.file_preview/FilePreviewWidget";
+  final String _viewType = "com.gstory.file_preview/FilePreviewWidget";
 
   MethodChannel? _channel;
 
@@ -74,7 +76,23 @@ class _FilePreviewWidgetState extends State<FilePreviewWidget> {
 
   //监听原生view传值
   Future<dynamic> _platformCallHandler(MethodCall call) async {
+    Map map = call.arguments;
     switch (call.method) {
+      case "onShow":
+        if(widget.callBack?.onShow != null){
+          widget.callBack?.onShow!();
+        }
+        break;
+      case "onDownload":
+        if(widget.callBack?.onDownload != null){
+          widget.callBack?.onDownload!(map["progress"]);
+        }
+        break;
+      case "onFail":
+        if(widget.callBack?.onFail != null){
+          widget.callBack?.onFail!(map["code"],map["msg"]);
+        }
+        break;
     }
   }
 }

@@ -1,7 +1,7 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.0.2-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.0.3-success></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
@@ -18,6 +18,18 @@
 
 [更新日志](https://github.com/gstory0404/file_preview/blob/master/CHANGELOG.md)
 
+## 支持格式
+|格式|android|ios|
+|:----|:----:|:----:|
+|.doc| ✅ | ✅ |
+|.docx| ✅ | ✅ |
+|.ppt| ✅ | ✅ |
+|.pptx| ✅ | ✅ |
+|.xls| ✅ | ✅ |
+|.xlsx| ✅ | ✅ |
+|.pdf|✅ | ✅ |
+
+
 ## 常见问题
 1、TBS初始化失败  
 https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz 
@@ -25,7 +37,7 @@ https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^1.0.2
+file_preview: ^1.0.3
 ```
 ### 2、引入
 ```Dart
@@ -75,7 +87,7 @@ buildTypes {
     }
 ```
 
-使用
+#### 1、预览文件
 ```dart
   //使用前进行判断是否已经初始化
     var isInit = await FilePreview.tbsHasInit();
@@ -90,6 +102,13 @@ buildTypes {
               height: 700,//高
               path: "",//file path or http url
             )
+```
+
+#### 2、删除本地缓存
+andorid预览在线文件需要先将文件下载到本地/data/user/0/com.gstory.file_preview_example/files/file_preview/目录下，
+可以通过一下方法删除缓存
+```dart
+await FilePreview.deleteCache();
 ```
 
 ### 4、http配置

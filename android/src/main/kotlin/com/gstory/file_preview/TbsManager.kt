@@ -45,7 +45,9 @@ class TbsManager private constructor() {
                 isInit = arg0
                 if (arg0) {
                     callBack?.initFinish(true)
+                    Log.e("TBS内核", "initFinish:$arg0")
                 } else {
+                    callBack?.initFinish(false)
                     QbSdk.disableSensitiveApi()
                     val map: HashMap<String, Any> = HashMap()
                     map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true

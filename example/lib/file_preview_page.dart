@@ -30,6 +30,17 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
           width: 400,
           height: 700,
           path: widget.path,
+          callBack: FilePreviewCallBack(
+            onShow: (){
+              print("文件打开成功");
+            },
+            onDownload: (progress){
+              print("文件下载进度$progress");
+            },
+            onFail: (code,msg){
+              print("文件打开失败 $code  $msg");
+            }
+          ),
         ),
       ),
     );

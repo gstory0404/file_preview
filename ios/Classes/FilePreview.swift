@@ -20,6 +20,8 @@ public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
     
     var webView:WKWebView
     
+    private var channel : FlutterMethodChannel?
+    
     init(_ frame : CGRect,binaryMessenger: FlutterBinaryMessenger , id : Int64, params :Any?) {
         let dict = params as! NSDictionary
         self.width = Float(dict.value(forKey: "width") as! Double)
@@ -29,9 +31,9 @@ public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
         self.webView = WKWebView(frame:CGRect(x:0, y:0, width:Int(self.width), height:Int(self.height)))
         self.container.addSubview(self.webView)
         super.init()
-        // 设置代理
-//        self.webView.navigationDelegate = self
+        self.channel = FlutterMethodChannel.init(name: "com.gstory.file_preview/FilePreviewWidget_" + String(id), binaryMessenger: binaryMessenger)
         loadWebview()
+        
     }
     
     public func view() -> UIView {
@@ -45,7 +47,6 @@ public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
             let url = NSURL(string: path2)
             let request = NSMutableURLRequest(url: url! as URL)
             self.webView.load(request as URLRequest as URLRequest)
-            
         }else{
             let url = NSURL.fileURL(withPath: self.path)
             if(self.path.contains(".txt")){
@@ -58,6 +59,7 @@ public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
                 self.webView.loadFileURL(url, allowingReadAccessTo: url)
             }
         }
+        self.channel?.invokeMethod("onShow", arguments: "")
     }
     
 //    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {

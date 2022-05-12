@@ -4,6 +4,7 @@ import android.app.Activity
 import android.content.Context
 import android.util.Log
 import androidx.annotation.NonNull
+import com.gstory.file_preview.utils.FileUtils
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.QbSdk.PreInitCallback
@@ -73,7 +74,9 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             }
         } else if (call.method == "tbsHasInit") {
             result.success(TbsManager.instance.isInit)
-
+        } else if (call.method == "deleteCache") {
+            FileUtils.deleteCache(mActivity!!,FileUtils.getDir(mActivity!!))
+            result.success(true)
         } else if (call.method == "tbsVersion") {
             result.success(QbSdk.getTbsVersion(applicationContext).toString())
         }

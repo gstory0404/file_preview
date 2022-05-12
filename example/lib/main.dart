@@ -67,6 +67,23 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
+              child: const Text('初始化TBS'),
+              onPressed: () async {
+                _initTBS();
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('检测TBS是否初始化成功'),
+              onPressed: () async {
+                isInit = await FilePreview.tbsHasInit();
+                setState(() {});
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
               child: const Text('在线docx预览'),
               onPressed: () async {
                 isInit = await FilePreview.tbsHasInit();
@@ -183,6 +200,17 @@ class _HomePageState extends State<HomePage> {
                   );
                 }
               },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
+              child: const Text('清理本地缓存文件（android有效）'),
+              onPressed: () async {
+               var delete = await FilePreview.deleteCache();
+               if(delete){
+                 print("缓存文件清理成功");
+               }
+              }
             ),
           ],
         ),
