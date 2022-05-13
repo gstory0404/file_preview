@@ -24,7 +24,7 @@ import java.io.File
 
 internal class FilePreview(
         var activity: Activity,
-        messenger: BinaryMessenger?,
+        messenger: BinaryMessenger,
         id: Int,
         params: Map<String?, Any?>
 ) :
