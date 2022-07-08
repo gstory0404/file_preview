@@ -20,7 +20,7 @@ class TbsManager private constructor() {
     }
 
     fun initTBS(app: Context, callBack: InitCallBack?) {
-        if(isInit){
+        if (isInit) {
             callBack?.initFinish(true)
             return
         }
@@ -33,7 +33,8 @@ class TbsManager private constructor() {
         map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
         QbSdk.initTbsSettings(map)
         QbSdk.setDownloadWithoutWifi(true)
-        val cb: QbSdk.PreInitCallback = object : QbSdk.PreInitCallback {
+        //x5内核初始化接口
+        QbSdk.initX5Environment(app, object : QbSdk.PreInitCallback {
             /**
              * 预初始化结束
              * 由于X5内核体积较大，需要依赖网络动态下发，所以当内核不存在的时候，默认会回调false，此时将会使用系统内核代替
@@ -61,9 +62,7 @@ class TbsManager private constructor() {
             override fun onCoreInitFinished() {
                 Log.e("TBS内核", "onCoreInitFinished")
             }
-        }
-        //x5内核初始化接口
-        QbSdk.initX5Environment(app, cb)
+        })
         QbSdk.setTbsListener(object : TbsListener {
             override fun onDownloadFinish(i: Int) {
                 //tbs内核下载完成回调

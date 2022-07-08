@@ -3,14 +3,11 @@ package com.gstory.file_preview.utils
 import android.content.Context
 import android.text.TextUtils
 import android.util.Log
-import okhttp3.Callback
-import okhttp3.OkHttpClient
-import okhttp3.Request
-import okhttp3.Response
 import java.io.File
 import java.io.FileOutputStream
-import java.io.IOException
 import java.io.InputStream
+import java.net.HttpURLConnection
+import java.net.URL
 
 /**
  * @Author: gstory
@@ -34,13 +31,13 @@ object FileUtils {
     /**
      * 删除缓存文件夹
      */
-    fun deleteCache(context: Context,dir: File) {
+    fun deleteCache(context: Context, dir: File) {
         if (!dir.exists() || !dir.isDirectory) {
             return
         }
         for (file in dir.listFiles()!!) {
             if (file.isFile) file.delete()
-            else if (file.isDirectory) deleteCache(context,file)
+            else if (file.isDirectory) deleteCache(context, file)
         }
         dir.delete()
     }
@@ -66,8 +63,8 @@ object FileUtils {
     /**
      * 下载文件
      */
-    fun downLoadFile(context: Context, url: String, callback: DownloadCallback) {
-        var filename = url.substring(url.lastIndexOf('/') + 1)
+    fun downLoadFile(context: Context, downloadUrl: String, callback: DownloadCallback) {
+        var filename = downloadUrl.substring(downloadUrl.lastIndexOf('/') + 1)
         var saveFile =
             File(FileUtils.getDir(context).toString() + File.separator + filename)
         //如果文件存在 不再下载 直接读取展示
@@ -75,50 +72,61 @@ object FileUtils {
             callback.onFinish(saveFile)
             return
         }
-        val request = Request.Builder().url(url).build();
-        OkHttpClient().newCall(request).enqueue(object : Callback {
-            override fun onFailure(call: okhttp3.Call, e: IOException) {
-                callback.onFail(e.toString())
-            }
+        Thread {
+            // 流和链接
+            var inputStream: InputStream? = null
+            var outputStream: FileOutputStream? = null
+            var connection: HttpURLConnection? = null
+            // 下载准备
+            var downloadedSize = 0 // 已经下载的文件大小
+            var fileTotalSize = 0 // 文件总大小
 
-            override fun onResponse(call: okhttp3.Call, response: Response) {
-                var `is`: InputStream? = null
-                val buf = ByteArray(2048)
-                var len = 0
-                var fos: FileOutputStream? = null
+            // 开始链接
+            try {
+                var url = URL(downloadUrl)
+                connection = url.openConnection() as HttpURLConnection?
+                connection?.connectTimeout = 10 * 1000;
+                connection?.readTimeout = 10 * 1000;
+                connection?.connect();
+                // 获取要下载的文件信息
+                fileTotalSize = connection?.contentLength!!       // 文件总大小
+
+
+                inputStream = connection.inputStream;
+                outputStream = FileOutputStream(saveFile)
+
+
+                var buffer = ByteArray(1024 * 4)
+                var len: Int
+                while (inputStream.read(buffer).also { len = it } > 0) {
+                    outputStream.write(buffer, 0, len);
+                    downloadedSize += len;
+                    // 计算文件下载进度
+                    var progress: Int = (downloadedSize * 1.0f / fileTotalSize * 100).toInt()
+                    callback.onProgress(progress)
+                }
+                // 下载成功
+                callback.onFinish(saveFile)
+            } catch (e: Exception) {
+                if (saveFile.exists()) {
+                    if (saveFile.delete()) {
+                        callback.onFail("下载失败$e")
+                    } else {
+                        callback.onFail("下载失败$e")
+                    }
+                } else {
+                    callback.onFail("下载失败$e")
+                }
+            } finally {
                 try {
-                    `is` = response.body?.byteStream()
-                    val total = response.body?.contentLength() ?: 1
-                    fos = FileOutputStream(saveFile)
-                    var sum = 0
-                    while ((`is`?.read(buf).also { len = it ?: 0 }) != -1) {
-                        fos.write(buf, 0, len)
-                        sum += len
-                        val progress = (sum * 1f / total * 100).toInt()
-                        //下载进度
-                        callback.onProgress(progress)
-                    }
-                    fos.flush();
-                    // 下载完成
-                    callback.onFinish(saveFile)
-
+                    inputStream?.close();
+                    outputStream?.close();
+                    connection?.disconnect();
                 } catch (e: Exception) {
-                    e.printStackTrace()
-                    callback.onFail(e.toString())
-                } finally {
-                    try {
-                        `is`?.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
-                    try {
-                        fos?.close()
-                    } catch (e: IOException) {
-                        e.printStackTrace()
-                    }
+                    callback.onFail("IO流关闭失败$e")
                 }
             }
-        })
+        }.start()
     }
 
     interface DownloadCallback {
