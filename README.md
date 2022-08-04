@@ -140,6 +140,13 @@ ios/Runner/Info.plist中
         </dict>
 ```
 
+## 测试文件
+https://gstory.vercel.app/ceshi/ceshi.docx         
+https://gstory.vercel.app/ceshi/ceshi.pdf       
+https://gstory.vercel.app/ceshi/ceshi.xlsx        
+https://gstory.vercel.app/ceshi/ceshi.txt    
+https://gstory.vercel.app/ceshi/ceshi.pptx      
+
 
 ## 插件链接
 
