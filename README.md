@@ -57,7 +57,7 @@ import 'package:file_preview/file_preview.dart';
 await FilePreview.initTBS();
 ```
 
-#### 2、异步初始化，无需在flutter中await等待
+#### 2、异步自动初始化，无需在flutter中await等待
 
 android目录下新建App继承FilePreviewApp
 ```dart
@@ -76,7 +76,7 @@ AndroidManifest.xml文件中修改
 
 
 ### 3、使用
-andorid在build.gradle中开启删除无用资源，打包后可能导致apk无法加载TBS内核库失败，可以如下设置
+andorid在build.gradle中开启删除无用资源，打包后如果遇到apk无法加载TBS内核库，可以尝试如下设置（非必须）
 ```dart
 buildTypes {
         release {
@@ -108,7 +108,7 @@ buildTypes {
 
 #### 2、删除本地缓存
 andorid预览在线文件需要先将文件下载到本地/data/user/0/com.gstory.file_preview_example/files/file_preview/目录下，
-可以通过一下方法删除缓存
+可以通过以下方法删除缓存
 ```dart
 await FilePreview.deleteCache();
 ```
