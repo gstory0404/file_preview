@@ -11,7 +11,7 @@
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、ppt、pptx、xls、xlsx、pdf等文件。
 
 ## 说明
-* andorid使用腾讯TBS服务，支持doc、docx、ppt、pptx、xls、xlsx、pdf、txt、epub文件的预览
+* andorid使用腾讯[TBS](https://x5.tencent.com/)服务，支持doc、docx、ppt、pptx、xls、xlsx、pdf、txt、epub文件的预览
 * ios使用WKWebView，WKWebView所支持的均可预览
 
 在线预览的文件链接必须是.pdf等文件格式结尾的链接可正常预览
