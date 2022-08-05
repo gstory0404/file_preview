@@ -114,6 +114,7 @@ await FilePreview.deleteCache();
 ```
 
 ### 4、http配置
+高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
 
 * Android
 
