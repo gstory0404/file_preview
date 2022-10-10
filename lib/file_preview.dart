@@ -7,6 +7,7 @@ import 'package:flutter/services.dart';
 
 part 'file_preview_widget.dart';
 part 'file_preview_callback.dart';
+part 'file_preview_controller.dart';
 
 class FilePreview {
   static const MethodChannel _channel = MethodChannel('file_preview');

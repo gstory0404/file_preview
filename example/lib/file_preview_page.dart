@@ -18,30 +18,67 @@ class FilePreviewPage extends StatefulWidget {
 }
 
 class _FilePreviewPageState extends State<FilePreviewPage> {
+  FilePreviewController controller = FilePreviewController();
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
       ),
-      body: Container(
-        alignment: Alignment.topLeft,
-        child: FilePreviewWidget(
-          width: 400,
-          height: 700,
-          path: widget.path,
-          callBack: FilePreviewCallBack(
-            onShow: (){
-              print("文件打开成功");
-            },
-            onDownload: (progress){
-              print("文件下载进度$progress");
-            },
-            onFail: (code,msg){
-              print("文件打开失败 $code  $msg");
-            }
+      body: Column(
+        children: [
+          Container(
+            alignment: Alignment.topLeft,
+            child: FilePreviewWidget(
+             controller: controller,
+              width: 400,
+              height: 600,
+              path: widget.path,
+              callBack: FilePreviewCallBack(onShow: () {
+                print("文件打开成功");
+              }, onDownload: (progress) {
+                print("文件下载进度$progress");
+              }, onFail: (code, msg) {
+                print("文件打开失败 $code  $msg");
+              }),
+            ),
           ),
-        ),
+          Row(
+            children: [
+              TextButton(
+                onPressed: () {
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.docx");
+                },
+                child: Text("docx"),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.pdf");
+                },
+                child: Text("pdf"),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.xisx");
+                },
+                child: Text("xisx"),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.txt");
+                },
+                child: Text("txt"),
+              ),
+              TextButton(
+                onPressed: () {
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.pptx");
+                },
+                child: Text("ppt"),
+              ),
+            ],
+          )
+        ],
       ),
     );
   }

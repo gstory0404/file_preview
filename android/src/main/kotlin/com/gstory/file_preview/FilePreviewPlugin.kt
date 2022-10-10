@@ -31,7 +31,7 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mActivity = binding.activity
         mFlutterPluginBinding?.platformViewRegistry?.registerViewFactory(
-            "com.gstory.file_preview/FilePreviewWidget",
+            "com.gstory.file_preview/filePreview",
             FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
         )
 
@@ -78,7 +78,7 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             FileUtils.deleteCache(mActivity!!,FileUtils.getDir(mActivity!!))
             result.success(true)
         } else if (call.method == "tbsVersion") {
-            result.success(QbSdk.getTbsVersion(applicationContext).toString())
+            result.success(QbSdk.getTbsSdkVersion().toString())
         }
     }
 

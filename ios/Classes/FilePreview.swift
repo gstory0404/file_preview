@@ -11,7 +11,7 @@ import UIKit
 import WebKit
 
 
-public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
+public class FilePreview : NSObject,FlutterPlatformView{
     private var container : UIView
     
     let width : Float
@@ -29,51 +29,77 @@ public class FilePreview : NSObject,FlutterPlatformView,WKNavigationDelegate{
         self.path = dict.value(forKey: "path") as! String
         self.container = UIView(frame: frame)
         self.webView = WKWebView(frame:CGRect(x:0, y:0, width:Int(self.width), height:Int(self.height)))
-        self.container.addSubview(self.webView)
         super.init()
-        self.channel = FlutterMethodChannel.init(name: "com.gstory.file_preview/FilePreviewWidget_" + String(id), binaryMessenger: binaryMessenger)
-        loadWebview()
-        
+        self.webView.navigationDelegate = self
+        self.container.addSubview(self.webView)
+        self.channel = FlutterMethodChannel.init(name: "com.gstory.file_preview/filePreview" + "_" + String(id), binaryMessenger: binaryMessenger)
+        self.initMethodCall()
+        showFile(filePath: self.path)
     }
     
     public func view() -> UIView {
         return self.container
     }
-
-    private func loadWebview(){
-        print(self.path)
-        if(self.path.starts(with: "http")){
-            let path2 = self.path.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
+    
+    //监听flutter传过来的参数
+    private func initMethodCall(){
+        self.channel?.setMethodCallHandler { (call, result) in
+            switch call.method {
+            case "showFile":
+                self.showFile(filePath: call.arguments as! String)
+                break
+            default:
+                break
+            }
+            
+        }
+    }
+    
+    //显示文件
+    private func showFile(filePath:String){
+        print(filePath)
+        self.channel?.invokeMethod("onStart", arguments: nil)
+        if(filePath.starts(with: "http")){
+            let path2 = filePath.addingPercentEncoding(withAllowedCharacters: CharacterSet.urlQueryAllowed) ?? ""
             let url = NSURL(string: path2)
             let request = NSMutableURLRequest(url: url! as URL)
             self.webView.load(request as URLRequest as URLRequest)
         }else{
-            let url = NSURL.fileURL(withPath: self.path)
-            if(self.path.contains(".txt")){
+            let url = NSURL.fileURL(withPath:filePath)
+            if(filePath.contains(".txt")){
                 let data = NSData.init(contentsOf: url)
                 self.webView.load(data! as Data, mimeType: "text/html", characterEncodingName: "UTF-8", baseURL: URL.init(fileURLWithPath: ""))
-            }else if(self.path.contains(".pdf")){
+            }else if(filePath.contains(".pdf")){
                 let data = NSData.init(contentsOf: url)
                 self.webView.load(data! as Data, mimeType: "application/pdf", characterEncodingName: "UTF-8", baseURL: URL.init(fileURLWithPath: ""))
             }else{
                 self.webView.loadFileURL(url, allowingReadAccessTo: url)
             }
         }
-        self.channel?.invokeMethod("onShow", arguments: "")
+        
+    }
+}
+
+extension FilePreview : WKNavigationDelegate{
+    
+    // 当内容开始返回时调用
+    public func webView(_ webView: WKWebView, didCommit navigation: WKNavigation!) {
+        print("file开始加载")
     }
     
-//    public func webView(_ webView: WKWebView, decidePolicyFor navigationAction: WKNavigationAction, decisionHandler: @escaping (WKNavigationActionPolicy) -> Void) {
-//        let webUrlStr = navigationAction.request.url?.absoluteString;
-//        print("=======>")
-//        print(webUrlStr)
-//        if((webUrlStr?.contains(".pdf")) != nil){
-//            let data = NSData.init(contentsOf: navigationAction.request.url!)
-//            self.webView.load(data! as Data, mimeType: "application/pdf", characterEncodingName: "GBK", baseURL: URL.init(fileURLWithPath: ""))
-//        }else if((webUrlStr?.contains(".txt")) != nil){
-//            let data = NSData.init(contentsOf: navigationAction.request.url!)
-//            self.webView.load(data! as Data, mimeType: "text/html", characterEncodingName: "GBK", baseURL: URL.init(fileURLWithPath: ""))
-//        }
-//        decisionHandler(.allow)
-//    }
+    // 页面加载完毕时调用
+    public func webView(_ webView: WKWebView, didFinish navigation: WKNavigation!) {
+        print("file加载完成")
+        self.channel?.invokeMethod("onShow", arguments: nil)
+    }
+    
+    //跳转失败时调用
+    public func webView(_ webView: WKWebView, didFail navigation: WKNavigation!, withError error: Error) {
+        print("file加载失败")
+        let map : NSDictionary = ["code":error.localizedDescription.count,
+                                  "msg":error.localizedDescription.description]
+        self.channel?.invokeMethod("onFail", arguments: map)
+    }
 }
+
 

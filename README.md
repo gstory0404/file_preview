@@ -1,7 +1,7 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.1.1-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.1.2-success></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
@@ -39,7 +39,7 @@ https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^1.1.1
+file_preview: ^1.1.2
 ```
 ### 2、引入
 ```Dart
@@ -99,22 +99,50 @@ buildTypes {
     }
 ```
 ```dart
-     FilePreviewWidget(
-              width: 400,//宽
-              height: 700,//高
-              path: "",//file path or http url
-            )
+FilePreviewController controller = FilePreviewController();
+FilePreviewWidget(
+    controller: controller,
+    width: 400,
+    height: 600,
+    //path 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
+    path: widget.path,
+    callBack: FilePreviewCallBack(onShow: () {
+      print("文件打开成功");
+    }, onDownload: (progress) {
+      print("文件下载进度$progress");
+    }, onFail: (code, msg) {
+      print("文件打开失败 $code  $msg");
+    }),
+),
+
 ```
 
-#### 2、删除本地缓存
-andorid预览在线文件需要先将文件下载到本地/data/user/0/com.gstory.file_preview_example/files/file_preview/目录下，
-可以通过以下方法删除缓存
+#### 2、切换文件
+```dart
+FilePreviewController controller = FilePreviewController();
+//path 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
+controller.showFile(path);
+```
+
+#### 3、删除本地缓存
+andorid预览在线文件需要先将文件下载到本地/data/user/0/包名/files/file_preview/目录下，
+可以通过以下方法删除缓存，仅andorid生效
 ```dart
 await FilePreview.deleteCache();
 ```
 
 ### 4、http配置
 高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
+
+### 5、获取TBS版本
+```dart
+String version = await FilePreview.tbsVersion();
+```
+
+### 6、TBS是否初始化
+```aidl
+bool isInit = await FilePreview.tbsHasInit();
+```
 
 * Android
 

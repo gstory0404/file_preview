@@ -11,6 +11,7 @@ import com.example.flutter_pangrowth.utils.UIUtils
 import com.gstory.file_preview.utils.FileUtils
 import com.tencent.smtt.sdk.TbsReaderView
 import io.flutter.plugin.common.BinaryMessenger
+import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.platform.PlatformView
 import java.io.File
@@ -28,7 +29,7 @@ internal class FilePreview(
         id: Int,
         params: Map<String?, Any?>
 ) :
-        PlatformView {
+        PlatformView , MethodChannel.MethodCallHandler {
 
     private val TAG = "FilePreview"
 
@@ -37,7 +38,7 @@ internal class FilePreview(
     private var height: Double = params["height"] as Double
     private var path: String = params["path"] as String
 
-    private var tbsReaderView: TbsReaderView
+    private var tbsReaderView: TbsReaderView? = null
 
     private var channel : MethodChannel?
 
@@ -50,27 +51,33 @@ internal class FilePreview(
     init {
         mContainer.layoutParams?.width = (UIUtils.dip2px(activity, width.toFloat())).toInt()
         mContainer.layoutParams?.height = (UIUtils.dip2px(activity, height.toFloat())).toInt()
-        tbsReaderView = TbsReaderView(activity, readerCallback)
-        tbsReaderView.layoutParams?.width = ViewGroup.LayoutParams.MATCH_PARENT
-        tbsReaderView.layoutParams?.height = ViewGroup.LayoutParams.MATCH_PARENT
-        mContainer.addView(tbsReaderView)
-        channel = MethodChannel(messenger,"com.gstory.file_preview/FilePreviewWidget_$id")
-        loadFile()
+        channel = MethodChannel(messenger,"com.gstory.file_preview/filePreview_$id")
+        channel?.setMethodCallHandler(this)
+        loadFile(path)
     }
 
     override fun getView(): View {
         return mContainer
     }
 
-    private fun loadFile() {
+    private fun loadFile(filePath : String) {
+        mContainer.removeAllViews()
+        if(tbsReaderView != null){
+            tbsReaderView?.onStop()
+            tbsReaderView = null
+        }
+        tbsReaderView = TbsReaderView(activity, readerCallback)
+        tbsReaderView?.layoutParams?.width = (UIUtils.dip2px(activity, width.toFloat())).toInt()
+        tbsReaderView?.layoutParams?.height = (UIUtils.dip2px(activity, height.toFloat())).toInt()
+        mContainer.addView(tbsReaderView)
         if(!TbsManager.instance.isInit){
             var map: MutableMap<String, Any?> = mutableMapOf("code" to 1004,"msg" to "TBS未初始化")
             channel?.invokeMethod("onFail",map)
             return
         }
         //tbs只能加载本地文件 如果是网络文件则先下载
-        if (path.startsWith("http")) {
-            FileUtils.downLoadFile(activity, path, object : FileUtils.DownloadCallback {
+        if (filePath.startsWith("http")) {
+            FileUtils.downLoadFile(activity, filePath, object : FileUtils.DownloadCallback {
                 override fun onProgress(progress: Int) {
 //                    Log.e(TAG, "文件下载进度$progress")
                     activity.runOnUiThread {
@@ -96,9 +103,8 @@ internal class FilePreview(
 
             })
         } else {
-            openFile(File(path))
+            openFile(File(filePath))
         }
-
     }
 
     /**
@@ -122,9 +128,9 @@ internal class FilePreview(
             Log.d(TAG, file.toString())
             localBundle.putString("filePath", file.toString())
             localBundle.putString("tempPath", bsReaderTemp)
-            val bool = tbsReaderView.preOpen(FileUtils.getFileType(file.toString()), false)
-            if (bool) {
-                tbsReaderView.openFile(localBundle)
+            val bool = tbsReaderView?.preOpen(FileUtils.getFileType(file.toString()), false)
+            if (bool == true) {
+                tbsReaderView?.openFile(localBundle)
                 var map: MutableMap<String, Any?> = mutableMapOf()
                 channel?.invokeMethod("onShow",map)
             }else{
@@ -141,6 +147,13 @@ internal class FilePreview(
 
 
     override fun dispose() {
-        tbsReaderView.onStop()
+        tbsReaderView?.onStop()
+    }
+
+    override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {
+        if ("showFile" == call.method) {
+            var path = call.arguments as String
+            loadFile(path)
+        }
     }
 }

@@ -7,7 +7,7 @@ public class SwiftFilePreviewPlugin: NSObject, FlutterPlugin {
         let instance = SwiftFilePreviewPlugin()
         registrar.addMethodCallDelegate(instance, channel: channel)
         let filePreviewFactory = FilePreviewFactory(messenger: registrar.messenger())
-        registrar.register(filePreviewFactory, withId: "com.gstory.file_preview/FilePreviewWidget")
+        registrar.register(filePreviewFactory, withId: "com.gstory.file_preview/filePreview")
     }
     
     public func handle(_ call: FlutterMethodCall, result: @escaping FlutterResult) {

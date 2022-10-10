@@ -9,30 +9,38 @@ class FilePreviewWidget extends StatefulWidget {
   final double width;
   final double height;
   final String path;
+  final FilePreviewController? controller;
   FilePreviewCallBack? callBack;
 
+  /// 文件预览widget
+  ///
+  /// [width] 宽
+  ///
+  /// [height] 高
+  ///
+  /// [path] 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
+  ///
+  /// [controller] [FilePreviewController]控制器
   FilePreviewWidget(
       {Key? key,
       required this.width,
       required this.height,
       required this.path,
+      this.controller,
       this.callBack})
       : super(key: key);
 
   @override
-  _FilePreviewWidgetState createState() => _FilePreviewWidgetState();
+  FilePreviewWidgetState createState() => FilePreviewWidgetState();
 }
 
-class _FilePreviewWidgetState extends State<FilePreviewWidget> {
-  final String _viewType = "com.gstory.file_preview/FilePreviewWidget";
+class FilePreviewWidgetState extends State<FilePreviewWidget> {
+  final String _viewType = "com.gstory.file_preview/filePreview";
 
   MethodChannel? _channel;
 
   @override
   Widget build(BuildContext context) {
-    // if (!_isShow) {
-    //   return Container();
-    // }
     if (defaultTargetPlatform == TargetPlatform.android) {
       return SizedBox(
         width: widget.width,
@@ -72,25 +80,27 @@ class _FilePreviewWidgetState extends State<FilePreviewWidget> {
   void _registerChannel(int id) {
     _channel = MethodChannel("${_viewType}_$id");
     _channel?.setMethodCallHandler(_platformCallHandler);
+    widget.controller?.init(_channel);
   }
 
   //监听原生view传值
   Future<dynamic> _platformCallHandler(MethodCall call) async {
-    Map map = call.arguments;
     switch (call.method) {
       case "onShow":
-        if(widget.callBack?.onShow != null){
+        if (widget.callBack?.onShow != null) {
           widget.callBack?.onShow!();
         }
         break;
       case "onDownload":
-        if(widget.callBack?.onDownload != null){
+        if (widget.callBack?.onDownload != null) {
+          Map map = call.arguments;
           widget.callBack?.onDownload!(map["progress"]);
         }
         break;
       case "onFail":
-        if(widget.callBack?.onFail != null){
-          widget.callBack?.onFail!(map["code"],map["msg"]);
+        if (widget.callBack?.onFail != null) {
+          Map map = call.arguments;
+          widget.callBack?.onFail!(map["code"], map["msg"]);
         }
         break;
     }

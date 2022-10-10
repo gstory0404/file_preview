@@ -38,15 +38,15 @@ class TbsManager private constructor() {
             /**
              * 预初始化结束
              * 由于X5内核体积较大，需要依赖网络动态下发，所以当内核不存在的时候，默认会回调false，此时将会使用系统内核代替
-             * @param arg0 是否使用X5内核
+             * @param isX5 是否使用X5内核
              */
-            override fun onViewInitFinished(arg0: Boolean) {
+            override fun onViewInitFinished(isX5: Boolean) {
                 //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                Log.e("TBS内核", "onViewInitFinished:$arg0")
-                isInit = arg0
-                if (arg0) {
+                Log.e("TBS内核", "onViewInitFinished:$isX5")
+                isInit = isX5
+                if (isX5) {
                     callBack?.initFinish(true)
-                    Log.e("TBS内核", "initFinish:$arg0")
+                    Log.e("TBS内核", "initFinish:$isX5")
                 } else {
                     callBack?.initFinish(false)
                     QbSdk.disableSensitiveApi()
