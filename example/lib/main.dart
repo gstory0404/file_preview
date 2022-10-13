@@ -211,6 +211,26 @@ class _HomePageState extends State<HomePage> {
                     print("缓存文件清理成功");
                   }
                 }),
+            MaterialButton(
+                color: Colors.blue,
+                textColor: Colors.white,
+                child: const Text('在线视频(仅支持ios)'),
+                onPressed: () async {
+                  if (Platform.isIOS) {
+                    Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (_) {
+                          return const FilePreviewPage(
+                            title: "在线视频(仅支持ios)",
+                            path:
+                                "https://v.gsuus.com/play/xbo8Dkdg/index.m3u8",
+                          );
+                        },
+                      ),
+                    );
+                  }
+                }),
           ],
         ),
       ),
