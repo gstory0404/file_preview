@@ -131,18 +131,14 @@ andorid预览在线文件需要先将文件下载到本地/data/user/0/包名/fi
 await FilePreview.deleteCache();
 ```
 
-### 4、http配置
-高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
-
-### 5、获取TBS版本
+### 4、获取TBS版本
 ```dart
 String version = await FilePreview.tbsVersion();
 ```
 
-### 6、TBS是否初始化
-```aidl
-bool isInit = await FilePreview.tbsHasInit();
-```
+
+### 5、http配置
+高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
 
 * Android
 
