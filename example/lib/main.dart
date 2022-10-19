@@ -75,6 +75,14 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
+              child: const Text('TBS调试页面'),
+              onPressed: () async {
+                await FilePreview.tbsDebug();
+              },
+            ),
+            MaterialButton(
+              color: Colors.blue,
+              textColor: Colors.white,
               child: const Text('检测TBS是否初始化成功'),
               onPressed: () async {
                 isInit = await FilePreview.tbsHasInit();

@@ -2,6 +2,7 @@ package com.gstory.file_preview
 
 import android.app.Activity
 import android.content.Context
+import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
 import com.gstory.file_preview.utils.FileUtils
@@ -79,6 +80,9 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             result.success(true)
         } else if (call.method == "tbsVersion") {
             result.success(QbSdk.getTbsSdkVersion().toString())
+        } else if (call.method == "tbsDebug") {
+            mActivity?.startActivity(Intent(mActivity!!,X5WebviewActivity().javaClass))
+            result.success(true)
         }
     }
 

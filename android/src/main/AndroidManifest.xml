@@ -6,5 +6,6 @@
             android:label="dexopt"
             android:process=":dexopt" >
         </service>
+        <activity android:name=".X5WebviewActivity"/>
     </application>
 </manifest>

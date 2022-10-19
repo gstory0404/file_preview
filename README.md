@@ -136,8 +136,13 @@ await FilePreview.deleteCache();
 String version = await FilePreview.tbsVersion();
 ```
 
+### 5、TBS调试页面
+```dart
+await FilePreview.tbsDebug();
+```
 
-### 5、http配置
+
+### 6、http配置
 高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
 
 * Android

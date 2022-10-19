@@ -1,4 +1,3 @@
-
 import 'dart:async';
 
 import 'package:flutter/foundation.dart';
@@ -27,5 +26,9 @@ class FilePreview {
 
   static Future<String> tbsVersion() async {
     return await _channel.invokeMethod('tbsVersion');
+  }
+
+  static Future<String> tbsDebug() async {
+    return await _channel.invokeMethod('tbsDebug');
   }
 }
