@@ -30,6 +30,7 @@
 |.xls| ✅ | ✅ |
 |.xlsx| ✅ | ✅ |
 |.pdf|✅ | ✅ |
+|more| TBS限制不可预览 | WKWebView支持均可预览 |
 
 
 ## 常见问题
