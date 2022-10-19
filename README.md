@@ -137,6 +137,7 @@ String version = await FilePreview.tbsVersion();
 ```
 
 #### 5、TBS调试页面
+仅andorid生效
 ```dart
 await FilePreview.tbsDebug();
 ```
