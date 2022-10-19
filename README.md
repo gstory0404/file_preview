@@ -104,7 +104,7 @@ FilePreviewWidget(
     controller: controller,
     width: 400,
     height: 600,
-    //path 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
+    //path 文件地址 https/http开头、文件格式结尾的地址，或者本地绝对路径
     path: widget.path,
     callBack: FilePreviewCallBack(onShow: () {
       print("文件打开成功");
@@ -120,7 +120,7 @@ FilePreviewWidget(
 #### 2、切换文件
 ```dart
 FilePreviewController controller = FilePreviewController();
-//path 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
+//path 文件地址 https/http开头、文件格式结尾的地址，或者本地绝对路径
 controller.showFile(path);
 ```
 
