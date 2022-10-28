@@ -1,7 +1,7 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.1.2-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.1.3-success></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
@@ -40,7 +40,7 @@ https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^1.1.2
+file_preview: ^1.1.3
 ```
 ### 2、引入
 ```Dart
