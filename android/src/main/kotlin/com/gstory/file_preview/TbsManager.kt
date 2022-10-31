@@ -40,7 +40,7 @@ class TbsManager private constructor() {
              */
             override fun onViewInitFinished(isX5: Boolean) {
                 //x5內核初始化完成的回调，为true表示x5内核加载成功，否则表示x5内核加载失败，会自动切换到系统内核。
-                Log.e("TBS内核", "onViewInitFinished:$isX5")
+                Log.e("TBS内核", "onViewInitFinished: 是否启TBS内核$isX5")
                 isInit = isX5
                 if (isX5) {
                     callBack?.initFinish(true)
@@ -56,7 +56,8 @@ class TbsManager private constructor() {
             }
 
             override fun onCoreInitFinished() {
-                Log.e("TBS内核", "onCoreInitFinished")
+                //内核初始化完成，可能为系统内核，也可能为系统内核
+                Log.e("TBS内核", "内核初始化完成，可能为系统内核，也可能为系统内核")
             }
         })
         QbSdk.setTbsListener(object : TbsListener {
