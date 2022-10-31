@@ -24,8 +24,6 @@ class TbsManager private constructor() {
             callBack?.initFinish(true)
             return
         }
-        //禁用隐私API的获取
-        QbSdk.disableSensitiveApi()
         //BS内核首次使用和加载时，ART虚拟机会将Dex文件转为Oat，该过程由系统底层触发且耗时较长，很容易引起anr问题，解决方法是使用TBS的 ”dex2oat优化方案“。
         // 在调用TBS初始化、创建WebView之前进行如下配置
         val map: HashMap<String, Any> = HashMap()
@@ -46,10 +44,8 @@ class TbsManager private constructor() {
                 isInit = isX5
                 if (isX5) {
                     callBack?.initFinish(true)
-                    Log.e("TBS内核", "initFinish:$isX5")
                 } else {
                     callBack?.initFinish(false)
-                    QbSdk.disableSensitiveApi()
                     val map: HashMap<String, Any> = HashMap()
                     map[TbsCoreSettings.TBS_SETTINGS_USE_SPEEDY_CLASSLOADER] = true
                     map[TbsCoreSettings.TBS_SETTINGS_USE_DEXLOADER_SERVICE] = true
@@ -66,7 +62,7 @@ class TbsManager private constructor() {
         QbSdk.setTbsListener(object : TbsListener {
             override fun onDownloadFinish(i: Int) {
                 //tbs内核下载完成回调
-                Log.e("TBS内核", "下载完成$i")
+                Log.e("TBS内核", "下载结束 状态码$i")
             }
 
             override fun onInstallFinish(i: Int) {
