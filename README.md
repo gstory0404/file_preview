@@ -40,6 +40,9 @@ https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz
 2、错误码查看  
 https://x5.tencent.com/docs/tbsapi.html TbsCommonCode
 
+3、api更新说明   
+https://doc.weixin.qq.com/doc/w3_AGoAtwbdAFw5hQq0KqWRPmmRF18F3?scode=AJEAIQdfAAo7OBDhdiAGoAtwbdAFw
+
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
