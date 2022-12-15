@@ -37,6 +37,9 @@ andorid在线预览时会下载文件至本地再进行预览，所以url文件�
 1、TBS初始化失败  
 https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz 
 
+2、错误码查看  
+https://x5.tencent.com/docs/tbsapi.html TbsCommonCode
+
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
