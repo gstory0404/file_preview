@@ -1,7 +1,11 @@
 # Flutter文档预览插件
 
 <p>
-<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/badge/file_preview-v1.1.4-success></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/pub/v/file_preview?color=orange></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/pub/likes/file_preview></a>
+<a href="https://pub.flutter-io.cn/packages/file_preview"><img src=https://img.shields.io/pub/points/file_preview></a>
+<a href="https://github.com/gstory0404/file_preview/commits"><img src=https://img.shields.io/github/last-commit/gstory0404/file_preview></a>
+<a href="https://github.com/gstory0404/file_preview"><img src=https://img.shields.io/github/stars/gstory0404/file_preview></a>
 </p>
 
 <img src="https://github.com/gstory0404/file_preview/blob/master/images/android.gif" width="30%">   <img src="https://github.com/gstory0404/file_preview/blob/master/images/ios.gif" width="30%">
