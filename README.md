@@ -40,8 +40,12 @@ ios不受影响。
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^1.1.4
+  file_preview:
+    git:
+      url: https://github.com/gstory0404/file_preview.git
+      ref: 592a52839861075a3da9200fada10667c1cb68da
 ```
+
 ### 2、引入
 ```Dart
 import 'package:file_preview/file_preview.dart';
