@@ -15,10 +15,11 @@
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、ppt、pptx、xls、xlsx、pdf等文件。
 
 ## 说明
-* andorid使用腾讯[TBS](https://x5.tencent.com/)服务，支持doc、docx、ppt、pptx、xls、xlsx、pdf、txt、epub文件的预览
+* andorid使用腾讯[TBS](https://cloud.tencent.com/product/tbs)服务，支持doc、docx、rtf、ppt、pptx、xls、xlsx、xlsm、csv、pdf、txt、epub、chm文件的预览
 * ios使用WKWebView，WKWebView所支持的均可预览
 
-andorid在线预览时会下载文件至本地再进行预览，所以url文件链接必须是.pdf等文件格式结尾的，同名文件再次预览不再下载直接读取本地缓存。ios不受影响。
+andorid在线预览时会下载文件至本地再进行预览，所以url文件链接必须是.pdf等文件格式结尾的，同名文件再次预览不再下载直接读取本地缓存，如需重新下载则调用删除缓存方法。
+ios不受影响。
 
 ## 版本更新
 
@@ -35,17 +36,6 @@ andorid在线预览时会下载文件至本地再进行预览，所以url文件�
 |.xlsx| ✅ | ✅ |
 |.pdf|✅ | ✅ |
 |more| TBS限制不可预览 | WKWebView支持均可预览 |
-
-
-## 常见问题
-1、TBS初始化失败  
-https://docs.qq.com/doc/DYW9QdXJNWFZnbVdz 
-
-2、错误码查看  
-https://x5.tencent.com/docs/tbsapi.html TbsCommonCode
-
-3、api更新说明   
-https://doc.weixin.qq.com/doc/w3_AGoAtwbdAFw5hQq0KqWRPmmRF18F3?scode=AJEAIQdfAAo7OBDhdiAGoAtwbdAFw
 
 ## 集成步骤
 ### 1、pubspec.yaml

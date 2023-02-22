@@ -2,15 +2,10 @@ package com.gstory.file_preview
 
 import android.app.Activity
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import androidx.annotation.NonNull
 import com.gstory.file_preview.utils.FileUtils
-import com.tencent.smtt.export.external.TbsCoreSettings
-import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.QbSdk.PreInitCallback
-import com.tencent.smtt.sdk.TbsDownloader
-import com.tencent.smtt.sdk.TbsListener
+import com.tencent.tbs.reader.TbsFileInterfaceImpl
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -18,7 +13,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import java.util.HashMap
 
 
 /** FilePreviewPlugin */
@@ -32,8 +26,8 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mActivity = binding.activity
         mFlutterPluginBinding?.platformViewRegistry?.registerViewFactory(
-            "com.gstory.file_preview/filePreview",
-            FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
+                "com.gstory.file_preview/filePreview",
+                FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
         )
 
     }
@@ -62,27 +56,22 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     override fun onMethodCall(@NonNull call: MethodCall, @NonNull result: Result) {
         if (call.method == "initTBS") {
-            if (TbsManager.instance.isInit) {
-                result.success(true)
-            } else {
-                TbsManager.instance.initTBS(applicationContext!!, object : InitCallBack {
-                    override fun initFinish(b: Boolean) {
-                        mActivity?.runOnUiThread {
-                            result.success(b)
-                        }
-                    }
-                })
-            }
-        } else if (call.method == "tbsHasInit") {
-            result.success(TbsManager.instance.isInit)
-        } else if (call.method == "deleteCache") {
-            FileUtils.deleteCache(mActivity!!,FileUtils.getDir(mActivity!!))
-            result.success(true)
+            val license = call.argument<String>("license")
+            TbsFileInterfaceImpl.setLicenseKey(license)
+            TbsFileInterfaceImpl.fileEnginePreCheck(mActivity)
+            var isInit = TbsFileInterfaceImpl.initEngine(applicationContext)
+            Log.d("=====>", "初始化 $isInit")
+            result.success(isInit == 0)
+        }else if(call.method == "tbsHasInit"){
+            val ret = TbsFileInterfaceImpl.initEngine(applicationContext)
+            result.success(ret == 0)
         } else if (call.method == "tbsVersion") {
-            result.success(QbSdk.getTbsSdkVersion().toString())
-        } else if (call.method == "tbsDebug") {
-            mActivity?.startActivity(Intent(mActivity!!,X5WebviewActivity().javaClass))
+            result.success(TbsFileInterfaceImpl.getVersionName())
+        } else if (call.method == "deleteCache") {
+            FileUtils.deleteCache(mActivity!!, FileUtils.getDir(mActivity!!))
             result.success(true)
+        } else {
+
         }
     }
 

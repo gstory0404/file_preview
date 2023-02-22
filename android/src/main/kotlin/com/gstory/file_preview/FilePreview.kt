@@ -5,11 +5,13 @@ import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
 import android.view.View
-import android.view.ViewGroup
 import android.widget.FrameLayout
 import com.example.flutter_pangrowth.utils.UIUtils
 import com.gstory.file_preview.utils.FileUtils
-import com.tencent.smtt.sdk.TbsReaderView
+import com.tencent.tbs.reader.ITbsReader
+import com.tencent.tbs.reader.ITbsReaderCallback
+import com.tencent.tbs.reader.TbsFileInterfaceImpl
+import com.tencent.tbs.reader.TbsReaderView
 import io.flutter.plugin.common.BinaryMessenger
 import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
@@ -24,12 +26,12 @@ import java.io.File
  */
 
 internal class FilePreview(
-        var activity: Activity,
-        messenger: BinaryMessenger,
-        id: Int,
-        params: Map<String?, Any?>
+    var activity: Activity,
+    messenger: BinaryMessenger,
+    id: Int,
+    params: Map<String?, Any?>
 ) :
-        PlatformView , MethodChannel.MethodCallHandler {
+    PlatformView, MethodChannel.MethodCallHandler {
 
     private val TAG = "FilePreview"
 
@@ -38,20 +40,12 @@ internal class FilePreview(
     private var height: Double = params["height"] as Double
     private var path: String = params["path"] as String
 
-    private var tbsReaderView: TbsReaderView? = null
-
-    private var channel : MethodChannel?
-
-    private var readerCallback = object : TbsReaderView.ReaderCallback {
-        override fun onCallBackAction(p0: Int?, p1: Any?, p2: Any?) {
-//            Log.e(TAG, "文件打开回调$p0 $p1 $p2")
-        }
-    }
+    private var channel: MethodChannel?
 
     init {
         mContainer.layoutParams?.width = (UIUtils.dip2px(activity, width.toFloat())).toInt()
         mContainer.layoutParams?.height = (UIUtils.dip2px(activity, height.toFloat())).toInt()
-        channel = MethodChannel(messenger,"com.gstory.file_preview/filePreview_$id")
+        channel = MethodChannel(messenger, "com.gstory.file_preview/filePreview_$id")
         channel?.setMethodCallHandler(this)
         loadFile(path)
     }
@@ -60,21 +54,9 @@ internal class FilePreview(
         return mContainer
     }
 
-    private fun loadFile(filePath : String) {
+
+    private fun loadFile(filePath: String) {
         mContainer.removeAllViews()
-        if(tbsReaderView != null){
-            tbsReaderView?.onStop()
-            tbsReaderView = null
-        }
-        tbsReaderView = TbsReaderView(activity, readerCallback)
-        tbsReaderView?.layoutParams?.width = (UIUtils.dip2px(activity, width.toFloat())).toInt()
-        tbsReaderView?.layoutParams?.height = (UIUtils.dip2px(activity, height.toFloat())).toInt()
-        mContainer.addView(tbsReaderView)
-        if(!TbsManager.instance.isInit){
-            var map: MutableMap<String, Any?> = mutableMapOf("code" to 1004,"msg" to "TBS未初始化")
-            channel?.invokeMethod("onFail",map)
-            return
-        }
         //tbs只能加载本地文件 如果是网络文件则先下载
         if (filePath.startsWith("http")) {
             FileUtils.downLoadFile(activity, filePath, object : FileUtils.DownloadCallback {
@@ -89,8 +71,9 @@ internal class FilePreview(
                 override fun onFail(msg: String) {
                     Log.e(TAG, "文件下载失败$msg")
                     activity.runOnUiThread {
-                        var map: MutableMap<String, Any?> = mutableMapOf("code" to 1000,"msg" to msg)
-                        channel?.invokeMethod("onFail",map)
+                        var map: MutableMap<String, Any?> =
+                            mutableMapOf("code" to 1000, "msg" to msg)
+                        channel?.invokeMethod("onFail", map)
                     }
                 }
 
@@ -113,41 +96,63 @@ internal class FilePreview(
     private fun openFile(file: File?) {
         if (file != null && !TextUtils.isEmpty(file.toString())) {
             //增加下面一句解决没有TbsReaderTemp文件夹存在导致加载文件失败
-            val bsReaderTemp = FileUtils.getDir(activity).toString() + File.separator + "TbsReaderTemp"
+            val bsReaderTemp =
+                FileUtils.getDir(activity).toString() + File.separator + "TbsReaderTemp"
             val bsReaderTempFile = File(bsReaderTemp)
             if (!bsReaderTempFile.exists()) {
                 val mkdir: Boolean = bsReaderTempFile.mkdir()
                 if (!mkdir) {
                     Log.e(TAG, "创建$bsReaderTemp 失败")
-                    var map: MutableMap<String, Any?> = mutableMapOf("code" to 1001,"msg" to "文件下载失败")
-                    channel?.invokeMethod("onFail",map)
+                    var map: MutableMap<String, Any?> =
+                        mutableMapOf("code" to 1001, "msg" to "TbsReaderTemp缓存文件创建失败")
+                    channel?.invokeMethod("onFail", map)
                 }
             }
-            //加载文件
-            val localBundle = Bundle()
-            Log.d(TAG, file.toString())
-            localBundle.putString("filePath", file.toString())
-            localBundle.putString("tempPath", bsReaderTemp)
-            val bool = tbsReaderView?.preOpen(FileUtils.getFileType(file.toString()), false)
-            if (bool == true) {
-                tbsReaderView?.openFile(localBundle)
-                var map: MutableMap<String, Any?> = mutableMapOf()
-                channel?.invokeMethod("onShow",map)
-            }else{
-                Log.e(TAG, "文件打开失败！")
-                var map: MutableMap<String, Any?> = mutableMapOf("code" to 1002,"msg" to "文件格式不支持或者打开失败")
-                channel?.invokeMethod("onFail",map)
+            //文件格式
+            var fileExt = FileUtils.getFileType(file.toString())
+            val bool = TbsFileInterfaceImpl.canOpenFileExt(fileExt)
+            Log.d(TAG, "文件是否支持$bool  文件路径：$file $bsReaderTemp $fileExt")
+            if (bool) {
+                //加载文件
+                val localBundle = Bundle()
+                localBundle.putString("filePath", file.toString())
+                localBundle.putString("tempPath", bsReaderTemp)
+                localBundle.putString("fileExt", fileExt)
+                localBundle.putString("set_content_view_height", "$height")
+                var ret = TbsFileInterfaceImpl.getInstance().openFileReader(activity,localBundle,object :ITbsReaderCallback{
+                    override fun onCallBackAction(p0: Int?, p1: Any?, p2: Any?) {
+                        Log.e(TAG, "文件打开回调 $p0  $p1  $p2")
+                        if (p1 is Bundle) {
+                            val id = p1.getInt("typeId")
+                            if (ITbsReader.TBS_READER_TYPE_STATUS_UI_SHUTDOWN == id) {
+                                //加密文档弹框取消需关闭activity
+                            }
+                        }
+                    }
+                },mContainer)
+                if(ret == 0){
+                    channel?.invokeMethod("onShow", null)
+                }else{
+                    var map: MutableMap<String, Any?> =
+                        mutableMapOf("code" to ret, "msg" to "error:$ret")
+                    channel?.invokeMethod("onFail", map)
+                }
+            } else {
+                Log.e(TAG, "文件打开失败！文件格式暂不支持")
+                var map: MutableMap<String, Any?> =
+                    mutableMapOf("code" to 1002, "msg" to "文件格式不支持或者打开失败")
+                channel?.invokeMethod("onFail", map)
             }
         } else {
             Log.e(TAG, "文件路径无效！")
-            var map: MutableMap<String, Any?> = mutableMapOf("code" to 1003,"msg" to "本地文件路径无效")
-            channel?.invokeMethod("onFail",map)
+            var map: MutableMap<String, Any?> = mutableMapOf("code" to 1003, "msg" to "本地文件路径无效")
+            channel?.invokeMethod("onFail", map)
         }
     }
 
 
     override fun dispose() {
-        tbsReaderView?.onStop()
+        TbsFileInterfaceImpl.getInstance().closeFileReader()
     }
 
     override fun onMethodCall(call: MethodCall, result: MethodChannel.Result) {

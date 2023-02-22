@@ -5,15 +5,20 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 part 'file_preview_widget.dart';
+
 part 'file_preview_callback.dart';
+
 part 'file_preview_controller.dart';
 
 class FilePreview {
   static const MethodChannel _channel = MethodChannel('file_preview');
 
-  static Future<bool> initTBS() async {
-    final bool init = await _channel.invokeMethod('initTBS');
-    return init;
+  static Future<bool> initTBS({
+    required String license,
+  }) async {
+    return await _channel.invokeMethod('initTBS', {
+      "license": license,
+    });
   }
 
   static Future<bool> tbsHasInit() async {
