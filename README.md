@@ -50,49 +50,21 @@ import 'package:file_preview/file_preview.dart';
 ### 3、TBS初始化
 
 由于使用android使用TBS服务，所以必须在FilePreviewWidget使用前完成初始化，不然无法加载。
-如本地无TBS不存在会在初始化时进行下载，会耗时3-30秒左右
 
-以下二选一，自动初始化失败时可进行手动初始化
-#### 1、 手动初始化
 ```dart
 await FilePreview.initTBS();
 ```
 
-#### 2、异步自动初始化，无需在flutter中await等待
+### 3、获取TBS版本
 
-android目录下新建App继承FilePreviewApp
 ```dart
-
-class App : FilePreviewApp() {
-}
-```
-AndroidManifest.xml文件中修改
-```dart
-   <application
-        ...
-        android:name=".App"
-        ...>
-    </application>
+String version = await FilePreview.tbsVersion();
 ```
 
+### 4、预览文件
 
-### 3、使用
-andorid在build.gradle中开启删除无用资源，打包后如果遇到apk无法加载TBS内核库，可以尝试如下设置（非必须）
 ```dart
-buildTypes {
-        release {
-            //关闭删除无用资源
-            shrinkResources false
-            //关闭删除无用代码
-            minifyEnabled false
-            zipAlignEnabled true
-        }
-    }
-```
-
-#### 1、预览文件
-```dart
-  //使用前进行判断是否已经初始化
+   //使用前进行判断是否已经初始化
     var isInit = await FilePreview.tbsHasInit();
     if (!isInit) {
         await FilePreview.initTBS();
@@ -100,7 +72,14 @@ buildTypes {
     }
 ```
 ```dart
+//文件控制器
 FilePreviewController controller = FilePreviewController();
+
+//切换文件
+//path 文件地址 https/http开头、文件格式结尾的地址，或者本地绝对路径
+controller.showFile(path);
+
+//文件预览widget
 FilePreviewWidget(
     controller: controller,
     width: 400,
@@ -115,36 +94,16 @@ FilePreviewWidget(
       print("文件打开失败 $code  $msg");
     }),
 ),
-
 ```
 
-#### 2、切换文件
-```dart
-FilePreviewController controller = FilePreviewController();
-//path 文件地址 https/http开头、文件格式结尾的地址，或者本地绝对路径
-controller.showFile(path);
-```
-
-#### 3、删除本地缓存
+### 5、删除本地缓存
 andorid预览在线文件需要先将文件下载到本地/data/user/0/包名/files/file_preview/目录下，
 可以通过以下方法删除缓存，仅andorid生效
 ```dart
 await FilePreview.deleteCache();
 ```
 
-#### 4、获取TBS版本
-```dart
-String version = await FilePreview.tbsVersion();
-```
-
-#### 5、TBS调试页面
-仅andorid生效
-```dart
-await FilePreview.tbsDebug();
-```
-
-
-#### 6、http配置
+### 6、http配置
 高版本andorid、ios默认禁用http，可以设置打开防止文件加载失败
 
 * Android
