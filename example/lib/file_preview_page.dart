@@ -14,7 +14,7 @@ class FilePreviewPage extends StatefulWidget {
       : super(key: key);
 
   @override
-  _FilePreviewPageState createState() => _FilePreviewPageState();
+  State<FilePreviewPage> createState() => _FilePreviewPageState();
 }
 
 class _FilePreviewPageState extends State<FilePreviewPage> {
@@ -31,7 +31,7 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
           Container(
             alignment: Alignment.topLeft,
             child: FilePreviewWidget(
-             controller: controller,
+              controller: controller,
               width: 400,
               height: 600,
               path: widget.path,
@@ -48,33 +48,38 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
             children: [
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.docx");
+                  controller
+                      .showFile("https://gstory.vercel.app/ceshi/ceshi.docx");
                 },
-                child: Text("docx"),
+                child: const Text("docx"),
               ),
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.pdf");
+                  controller
+                      .showFile("https://gstory.vercel.app/ceshi/ceshi.pdf");
                 },
-                child: Text("pdf"),
+                child: const Text("pdf"),
               ),
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.xisx");
+                  controller
+                      .showFile("https://gstory.vercel.app/ceshi/ceshi.xisx");
                 },
-                child: Text("xisx"),
+                child: const Text("xisx"),
               ),
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.txt");
+                  controller
+                      .showFile("https://gstory.vercel.app/ceshi/ceshi.txt");
                 },
-                child: Text("txt"),
+                child: const Text("txt"),
               ),
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.pptx");
+                  controller
+                      .showFile("https://gstory.vercel.app/ceshi/ceshi.pptx");
                 },
-                child: Text("ppt"),
+                child: const Text("ppt"),
               ),
             ],
           )

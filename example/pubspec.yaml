@@ -18,12 +18,12 @@ dependencies:
   flutter:
     sdk: flutter
 
-#  file_preview:
-#    path: ../
   file_preview:
-    git:
-      url: https://github.com/gstory0404/file_preview.git
-      ref: 4eca6f6c27153f450bf52b6dbe6a4bd0603351d4
+    path: ../
+#  file_preview:
+#    git:
+#      url: https://github.com/gstory0404/file_preview.git
+#      ref: 4eca6f6c27153f450bf52b6dbe6a4bd0603351d4
 
   # The following adds the Cupertino Icons font to your application.
   # Use with the CupertinoIcons class for iOS style icons.
@@ -39,7 +39,7 @@ dev_dependencies:
   # activated in the `analysis_options.yaml` file located at the root of your
   # package. See that file for information about deactivating specific lint
   # rules and activating additional ones.
-  flutter_lints: ^1.0.0
+  flutter_lints: ^2.0.1
 
 # For information on the generic Dart part of this file, see the
 # following page: https://dart.dev/tools/pub/pubspec

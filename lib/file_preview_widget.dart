@@ -10,7 +10,7 @@ class FilePreviewWidget extends StatefulWidget {
   final double height;
   final String path;
   final FilePreviewController? controller;
-  FilePreviewCallBack? callBack;
+  final FilePreviewCallBack? callBack;
 
   /// 文件预览widget
   ///
@@ -21,14 +21,14 @@ class FilePreviewWidget extends StatefulWidget {
   /// [path] 文件地址 https\http开头、文件格式结尾的地址，或者本地绝对路径
   ///
   /// [controller] [FilePreviewController]控制器
-  FilePreviewWidget(
-      {Key? key,
-      required this.width,
-      required this.height,
-      required this.path,
-      this.controller,
-      this.callBack})
-      : super(key: key);
+  const FilePreviewWidget({
+    Key? key,
+    required this.width,
+    required this.height,
+    required this.path,
+    this.controller,
+    this.callBack,
+  }) : super(key: key);
 
   @override
   FilePreviewWidgetState createState() => FilePreviewWidgetState();
