@@ -64,8 +64,12 @@ object FileUtils {
      * 下载文件
      */
     fun downLoadFile(context: Context, downloadUrl: String, callback: DownloadCallback) {
-        var filename = downloadUrl.substring(downloadUrl.lastIndexOf('/') + 1)
-        var saveFile =
+        val url = URL(downloadUrl)
+        // 考虑到文件来源可能是私有仓库，此时的路径地址一般为 https://xxx.com/file.ext?sign=sign_value
+        // 此时需要移除末尾的 query 参数
+        val path = url.path
+        val filename = path.substring(path.lastIndexOf('/') + 1)
+        val saveFile =
             File(FileUtils.getDir(context).toString() + File.separator + filename)
         //如果文件存在 不再下载 直接读取展示
         if (saveFile.exists()) {
@@ -83,7 +87,6 @@ object FileUtils {
 
             // 开始链接
             try {
-                var url = URL(downloadUrl)
                 connection = url.openConnection() as HttpURLConnection?
                 connection?.connectTimeout = 10 * 1000;
                 connection?.readTimeout = 10 * 1000;
@@ -96,13 +99,13 @@ object FileUtils {
                 outputStream = FileOutputStream(saveFile)
 
 
-                var buffer = ByteArray(1024 * 4)
+                val buffer = ByteArray(1024 * 4)
                 var len: Int
                 while (inputStream.read(buffer).also { len = it } > 0) {
                     outputStream.write(buffer, 0, len);
                     downloadedSize += len;
                     // 计算文件下载进度
-                    var progress: Int = (downloadedSize * 1.0f / fileTotalSize * 100).toInt()
+                    val progress: Int = (downloadedSize * 1.0f / fileTotalSize * 100).toInt()
                     callback.onProgress(progress)
                 }
                 // 下载成功

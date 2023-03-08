@@ -66,10 +66,11 @@ public class FilePreview : NSObject,FlutterPlatformView{
             self.webView.load(request as URLRequest as URLRequest)
         }else{
             let url = NSURL.fileURL(withPath:filePath)
-            if(filePath.contains(".txt")){
+            let ext = url.pathExtension.lowercased();
+            if(ext == "txt"){
                 let data = NSData.init(contentsOf: url)
                 self.webView.load(data! as Data, mimeType: "text/html", characterEncodingName: "UTF-8", baseURL: URL.init(fileURLWithPath: ""))
-            }else if(filePath.contains(".pdf")){
+            }else if(ext == "pdf"){
                 let data = NSData.init(contentsOf: url)
                 self.webView.load(data! as Data, mimeType: "application/pdf", characterEncodingName: "UTF-8", baseURL: URL.init(fileURLWithPath: ""))
             }else{
