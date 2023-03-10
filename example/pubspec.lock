@@ -76,11 +76,9 @@ packages:
   file_preview:
     dependency: "direct main"
     description:
-      path: "."
-      ref: "592a52839861075a3da9200fada10667c1cb68da"
-      resolved-ref: "592a52839861075a3da9200fada10667c1cb68da"
-      url: "https://github.com/gstory0404/file_preview.git"
-    source: git
+      path: ".."
+      relative: true
+    source: path
     version: "1.1.4"
   flutter:
     dependency: "direct main"

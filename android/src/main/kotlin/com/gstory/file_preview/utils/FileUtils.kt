@@ -17,6 +17,7 @@ import java.net.URL
 
 object FileUtils {
 
+
     /**
      * 获取缓存目录
      */
@@ -64,14 +65,8 @@ object FileUtils {
      * 下载文件
      */
     fun downLoadFile(context: Context, downloadUrl: String, callback: DownloadCallback) {
-        var filename = downloadUrl.substring(downloadUrl.lastIndexOf('/') + 1)
-        var saveFile =
-            File(FileUtils.getDir(context).toString() + File.separator + filename)
-        //如果文件存在 不再下载 直接读取展示
-        if (saveFile.exists()) {
-            callback.onFinish(saveFile)
-            return
-        }
+        var saveFile : File? = null
+        Log.e("saveFile===+>","$downloadUrl")
         Thread {
             // 流和链接
             var inputStream: InputStream? = null
@@ -88,28 +83,34 @@ object FileUtils {
                 connection?.connectTimeout = 10 * 1000;
                 connection?.readTimeout = 10 * 1000;
                 connection?.connect();
-                // 获取要下载的文件信息
-                fileTotalSize = connection?.contentLength!!       // 文件总大小
-
-
-                inputStream = connection.inputStream;
-                outputStream = FileOutputStream(saveFile)
-
-
-                var buffer = ByteArray(1024 * 4)
-                var len: Int
-                while (inputStream.read(buffer).also { len = it } > 0) {
-                    outputStream.write(buffer, 0, len);
-                    downloadedSize += len;
-                    // 计算文件下载进度
-                    var progress: Int = (downloadedSize * 1.0f / fileTotalSize * 100).toInt()
-                    callback.onProgress(progress)
+                //储存文件
+                saveFile =
+                    File("${getDir(context)}${File.separator}${downloadUrl.hashCode()}${connection?.fileExt()}")
+                Log.e("saveFile===+>","$saveFile")
+                //如果文件已存在 不再下载 直接读取展示
+                if (saveFile!!.exists()) {
+                    callback.onFinish(saveFile!!)
+                }else {
+                    // 获取要下载的文件信息
+                    fileTotalSize = connection?.contentLength!!       // 文件总大小
+                    inputStream = connection.inputStream
+                    outputStream = FileOutputStream(saveFile)
+                    var buffer = ByteArray(1024 * 4)
+                    var len: Int
+                    while (inputStream.read(buffer).also { len = it } > 0) {
+                        outputStream.write(buffer, 0, len);
+                        downloadedSize += len;
+                        // 计算文件下载进度
+                        var progress: Int = (downloadedSize * 1.0f / fileTotalSize * 100).toInt()
+                        callback.onProgress(progress)
+                    }
+                    // 下载成功
+                    callback.onFinish(saveFile!!)
                 }
-                // 下载成功
-                callback.onFinish(saveFile)
             } catch (e: Exception) {
-                if (saveFile.exists()) {
-                    if (saveFile.delete()) {
+                Log.e("download error","$e")
+                if (saveFile?.exists() == true) {
+                    if (saveFile!!.delete()) {
                         callback.onFail("下载失败$e")
                     } else {
                         callback.onFail("下载失败$e")
