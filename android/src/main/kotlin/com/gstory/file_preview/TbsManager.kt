@@ -1,12 +1,11 @@
 package com.gstory.file_preview
 
-import android.app.Application
 import android.content.Context
 import android.util.Log
 import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
 import com.tencent.smtt.sdk.TbsListener
-import java.util.HashMap
+import kotlin.collections.HashMap
 
 class TbsManager private constructor() {
 

@@ -3,14 +3,9 @@ package com.gstory.file_preview
 import android.app.Activity
 import android.content.Context
 import android.content.Intent
-import android.util.Log
 import androidx.annotation.NonNull
 import com.gstory.file_preview.utils.FileUtils
-import com.tencent.smtt.export.external.TbsCoreSettings
 import com.tencent.smtt.sdk.QbSdk
-import com.tencent.smtt.sdk.QbSdk.PreInitCallback
-import com.tencent.smtt.sdk.TbsDownloader
-import com.tencent.smtt.sdk.TbsListener
 import io.flutter.embedding.engine.plugins.FlutterPlugin
 import io.flutter.embedding.engine.plugins.activity.ActivityAware
 import io.flutter.embedding.engine.plugins.activity.ActivityPluginBinding
@@ -18,7 +13,6 @@ import io.flutter.plugin.common.MethodCall
 import io.flutter.plugin.common.MethodChannel
 import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
-import java.util.HashMap
 
 
 /** FilePreviewPlugin */

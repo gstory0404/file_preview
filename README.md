@@ -50,7 +50,7 @@ https://doc.weixin.qq.com/doc/w3_AGoAtwbdAFw5hQq0KqWRPmmRF18F3?scode=AJEAIQdfAAo
 ## 集成步骤
 ### 1、pubspec.yaml
 ```Dart
-file_preview: ^1.1.4
+file_preview: ^latest
 ```
 ### 2、引入
 ```Dart
