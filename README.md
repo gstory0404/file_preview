@@ -19,14 +19,14 @@
 
 ```dart
 //v1
-file_preview: ^1.1.4
+file_preview: ^latest
 
 
 //v2
 file_preview:
   git:
     url: https://github.com/gstory0404/file_preview.git
-    ref: 592a52839861075a3da9200fada10667c1cb68da
+    ref: v2
 ```
 
 ## 插件链接
