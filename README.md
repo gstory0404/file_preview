@@ -14,7 +14,7 @@
 
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、ppt、pptx、xls、xlsx、pdf等文件。
 
-⚠️[关于腾讯浏览服务内核SDK-内核文档能力调整公告](https://mp.weixin.qq.com/s/rmSa4Fs77MDdjFioRKwXPA),v1版本不可用，推荐切换v2版本
+⚠️[关于腾讯浏览服务内核SDK-内核文档能力调整公告](https://mp.weixin.qq.com/s/rmSa4Fs77MDdjFioRKwXPA),v1版本不可用，推荐切换v2版本或者寻找其他可替代插件
 
 ## 说明
 由于腾讯[X5内核](https://x5.tencent.com/)服务，已停止TBS的维护，单独提供一个[付费离线TBS预览服务](https://cloud.tencent.com/product/tbs)，所以插件分为[v1](https://github.com/gstory0404/file_preview/tree/v1)，[v2](https://github.com/gstory0404/file_preview/tree/v2)两个版本，[v1](https://github.com/gstory0404/file_preview/tree/v1)保持原先免费的X5TBS服务，[v2](https://github.com/gstory0404/file_preview/tree/v2)更改为付费的TBS预览服务，可以在[v1](https://github.com/gstory0404/file_preview/tree/v1)，[v2](https://github.com/gstory0404/file_preview/tree/v2)分支查看对应使用文档
