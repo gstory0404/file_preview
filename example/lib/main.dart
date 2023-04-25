@@ -37,7 +37,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initTBS() async {
-    isInit = await FilePreview.initTBS(license: "JKP9yE+c5Pj6JIbAe55x0LUOFrD1wz/u+jle60hO5nIq09Dd1IrlUm2XM/qahc2/DDY2Wkk3P7nJxps4lUFS4w==");
+    isInit = await FilePreview.initTBS(license: "your license");
     version = await FilePreview.tbsVersion();
     if (mounted) {
       setState(() {});
@@ -56,14 +56,6 @@ class _HomePageState extends State<HomePage> {
           children: [
             Text('TBS初始化 $isInit'),
             Text('TBS版本号 $version'),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('TBS调试页面'),
-              onPressed: () async {
-                await FilePreview.tbsDebug();
-              },
-            ),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
