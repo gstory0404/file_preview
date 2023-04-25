@@ -6,6 +6,9 @@ buildscript {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs project(':file_preview').file('libs')
+        }
     }
 
     dependencies {
@@ -18,6 +21,9 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
+        flatDir {
+            dirs project(':file_preview').file('libs')
+        }
     }
 }
 
@@ -45,7 +51,14 @@ android {
     }
 }
 
+repositories {
+    flatDir {
+        dirs 'libs'
+    }
+}
+
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation 'com.tencent.tbs:tbssdk:44226'
+    implementation(name: 'TbsFileSdk_base_armeabi_release_1.0.5.6000017.20230423093654', ext: 'aar')
+//    implementation files('libs/TbsFileSdk_1.0.5.aar')
 }

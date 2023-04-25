@@ -32,21 +32,13 @@ class _HomePageState extends State<HomePage> {
 
   @override
   void initState() {
-    _tbsVersion();
-    // _initTBS();
+    _initTBS();
     super.initState();
   }
 
   void _initTBS() async {
-    isInit = await FilePreview.initTBS();
-    if (mounted) {
-      setState(() {});
-    }
-  }
-
-  void _tbsVersion() async {
+    isInit = await FilePreview.initTBS(license: "your license");
     version = await FilePreview.tbsVersion();
-    isInit = await FilePreview.tbsHasInit();
     if (mounted) {
       setState(() {});
     }
@@ -67,22 +59,6 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
-              child: const Text('初始化TBS'),
-              onPressed: () async {
-                _initTBS();
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('TBS调试页面'),
-              onPressed: () async {
-                await FilePreview.tbsDebug();
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
               child: const Text('检测TBS是否初始化成功'),
               onPressed: () async {
                 isInit = await FilePreview.tbsHasInit();
@@ -92,15 +68,8 @@ class _HomePageState extends State<HomePage> {
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,
-              child: const Text('在线docx预览'),
+              child: const Text('在线预览'),
               onPressed: () async {
-                isInit = await FilePreview.tbsHasInit();
-                setState(() {});
-                if (!isInit) {
-                  _initTBS();
-                  return;
-                }
-
                 Navigator.push(
                   context,
                   MaterialPageRoute(
@@ -108,78 +77,6 @@ class _HomePageState extends State<HomePage> {
                       return const FilePreviewPage(
                         title: "docx预览",
                         path: "https://gstory.vercel.app/ceshi/ceshi.docx",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('在线pdf预览'),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const FilePreviewPage(
-                        title: "在线pdf预览",
-                        path: "https://gstory.vercel.app/ceshi/ceshi.pdf",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('在线xlsx预览'),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const FilePreviewPage(
-                        title: "在线xlsx预览",
-                        path: "https://gstory.vercel.app/ceshi/ceshi.xlsx",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('在线txt预览'),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const FilePreviewPage(
-                        title: "在线txt预览",
-                        path: "https://gstory.vercel.app/ceshi/ceshi.txt",
-                      );
-                    },
-                  ),
-                );
-              },
-            ),
-            MaterialButton(
-              color: Colors.blue,
-              textColor: Colors.white,
-              child: const Text('在线ppt预览'),
-              onPressed: () async {
-                Navigator.push(
-                  context,
-                  MaterialPageRoute(
-                    builder: (_) {
-                      return const FilePreviewPage(
-                        title: "在线pdf预览",
-                        path: "https://gstory.vercel.app/ceshi/ceshi.pptx",
                       );
                     },
                   ),
