@@ -2,17 +2,17 @@ group 'com.gstory.file_preview'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.3.72'
+    ext.kotlin_version = '1.8.20'
     repositories {
         google()
         mavenCentral()
-        flatDir {
-            dirs project(':file_preview').file('libs')
-        }
+//        flatDir {
+//            dirs project(':file_preview').file('libs')
+//        }
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:8.0.0'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -21,9 +21,9 @@ rootProject.allprojects {
     repositories {
         google()
         mavenCentral()
-        flatDir {
-            dirs project(':file_preview').file('libs')
-        }
+//        flatDir {
+//            dirs project(':file_preview').file('libs')
+//        }
     }
 }
 
@@ -32,7 +32,7 @@ apply plugin: 'kotlin-android'
 
 android {
     compileSdkVersion 30
-
+    namespace 'com.gstory.file_preview'
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
@@ -51,14 +51,15 @@ android {
     }
 }
 
-repositories {
-    flatDir {
-        dirs 'libs'
-    }
-}
+//repositories {
+//    flatDir {
+//        dirs 'libs'
+//    }
+//}
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation(name: 'TbsFileSdk_base_armeabi_release_1.0.5.6000017.20230423093654', ext: 'aar')
+    implementation fileTree(dir: 'libs', include: ['TbsFileSdk*.aar'])
+//    implementation(name: 'TbsFileSdk_base_armeabi_release_1.0.5.6000017.20230423093654', ext: 'aar')
 //    implementation files('libs/TbsFileSdk_1.0.5.aar')
 }
