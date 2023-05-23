@@ -16,10 +16,10 @@
 
 ## 说明
 * andorid使用腾讯[TBS](https://cloud.tencent.com/product/tbs)服务，支持doc、docx、rtf、ppt、pptx、xls、xlsx、xlsm、csv、pdf、txt、epub、chm文件的预览
-* ⚠️[关于腾讯浏览服务内核SDK-内核文档能力调整公告](https://mp.weixin.qq.com/s/rmSa4Fs77MDdjFioRKwXPA),x5内核版本不再维护（如需要使用查看v1分支），插件已切换为新版浏览服务内核
+* ⚠️[关于腾讯浏览服务内核SDK-内核文档能力调整公告](https://mp.weixin.qq.com/s/rmSa4Fs77MDdjFioRKwXPA),x5内核版本不再维护（v1分支），新版插件已切换为[新版浏览服务内核](https://cloud.tencent.com/product/tbs) 使用方法不变
 * ios使用WKWebView，WKWebView所支持的均可预览
 * 
-andorid在线预览时会下载文件至本地再进行预览，所以url文件链接必须是.pdf等文件格式结尾的，同名文件再次预览不再下载直接读取本地缓存，如需重新下载则调用删除缓存方法。
+andorid在线预览时会下载文件至本地再进行预览，文件格式获取url中[Content-Type](https://github.com/gstory0404/file_preview/blob/master/android/src/main/kotlin/com/gstory/file_preview/utils/ext.kt)来判断，同url文件再次预览不再下载直接读取本地缓存，如需重新下载则调用删除缓存方法。
 ios不受影响。
 
 ## 版本更新
