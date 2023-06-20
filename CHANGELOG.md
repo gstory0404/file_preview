@@ -1,3 +1,7 @@
+## 1.1.7
+* andorid kt版本升级1.6.10，gradle插件7.1.2
+* andorid TBS SDK升级1.0.5.6000019
+
 ## 1.1.6
 * Android切换为新的腾讯浏览服务内核
 

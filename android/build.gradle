@@ -2,7 +2,7 @@ group 'com.gstory.file_preview'
 version '1.0-SNAPSHOT'
 
 buildscript {
-    ext.kotlin_version = '1.5.20'
+    ext.kotlin_version = '1.6.10'
     repositories {
         google()
         mavenCentral()
@@ -12,7 +12,7 @@ buildscript {
     }
 
     dependencies {
-        classpath 'com.android.tools.build:gradle:4.1.0'
+        classpath 'com.android.tools.build:gradle:7.1.2'
         classpath "org.jetbrains.kotlin:kotlin-gradle-plugin:$kotlin_version"
     }
 }
@@ -59,6 +59,6 @@ repositories {
 
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    implementation(name: 'TbsFileSdk_base_armeabi_release_1.0.5.6000017.20230423093654', ext: 'aar')
+    implementation(name: 'TbsFileSdk_base_armeabi_release_1.0.5.6000019.20230608174733', ext: 'aar')
 //    implementation files('libs/TbsFileSdk_1.0.5.aar')
 }
