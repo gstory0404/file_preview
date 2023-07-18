@@ -1,3 +1,8 @@
+## 1.1.8
+* andorid TBS SDK升级1.0.5.6000020
+* android 新增文件下载时显示进度
+* android 文件格式优先判断url，无法获取时判断contentType
+
 ## 1.1.7
 * andorid kt版本升级1.6.10，gradle插件7.1.2
 * andorid TBS SDK升级1.0.5.6000019

@@ -57,7 +57,6 @@ object FileUtils {
             return str
         }
         str = paramString.substring(i + 1)
-        Log.d("FileUtils", "当前文件格式$str")
         return str
     }
 

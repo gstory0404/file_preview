@@ -1,11 +1,16 @@
 package com.gstory.file_preview
 
 import android.app.Activity
+import android.graphics.Color
 import android.os.Bundle
 import android.text.TextUtils
 import android.util.Log
+import android.view.Gravity
 import android.view.View
+import android.view.ViewGroup
 import android.widget.FrameLayout
+import android.widget.ProgressBar
+import android.widget.TextView
 import com.example.flutter_pangrowth.utils.UIUtils
 import com.gstory.file_preview.utils.FileUtils
 import com.tencent.tbs.reader.ITbsReader
@@ -45,6 +50,7 @@ internal class FilePreview(
     init {
         mContainer.layoutParams?.width = (UIUtils.dip2px(activity, width.toFloat())).toInt()
         mContainer.layoutParams?.height = (UIUtils.dip2px(activity, height.toFloat())).toInt()
+        mContainer.setBackgroundColor(Color.parseColor("#FFFFFF"));
         channel = MethodChannel(messenger, "com.gstory.file_preview/filePreview_$id")
         channel?.setMethodCallHandler(this)
         loadFile(path)
@@ -59,10 +65,23 @@ internal class FilePreview(
         mContainer.removeAllViews()
         //tbs只能加载本地文件 如果是网络文件则先下载
         if (filePath.startsWith("http")) {
+            //进度条
+            var progressBar = ProgressBar(activity)
+            progressBar.indeterminateDrawable = activity.resources.getDrawable(R.drawable.progressbar_style)
+            mContainer.addView(progressBar)
+            //文字
+            var mRateText = TextView(activity)
+            mRateText.layoutParams?.width = ViewGroup.LayoutParams.WRAP_CONTENT
+            mRateText.layoutParams?.height = ViewGroup.LayoutParams.WRAP_CONTENT
+                mRateText.gravity = Gravity.CENTER
+            mRateText.setTextColor(Color.parseColor("#cccccc"))
+            mRateText.textSize = 12f
+            mContainer.addView(mRateText)
             FileUtils.downLoadFile(activity, filePath, object : FileUtils.DownloadCallback {
                 override fun onProgress(progress: Int) {
 //                    Log.e(TAG, "文件下载进度$progress")
                     activity.runOnUiThread {
+                        mRateText.text = "$progress%"
                         var map: MutableMap<String, Any?> = mutableMapOf("progress" to progress)
                         channel?.invokeMethod("onDownload", map)
                     }
@@ -94,6 +113,7 @@ internal class FilePreview(
      * 打开文件
      */
     private fun openFile(file: File?) {
+        mContainer.removeAllViews()
         if (file != null && !TextUtils.isEmpty(file.toString())) {
             //增加下面一句解决没有TbsReaderTemp文件夹存在导致加载文件失败
             val bsReaderTemp =

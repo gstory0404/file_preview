@@ -1,5 +1,6 @@
 package com.gstory.file_preview.utils
 
+import android.text.TextUtils
 import android.util.Log
 import java.net.URLConnection
 
@@ -40,11 +41,34 @@ val contentTypeList: Map<String, String> = mapOf(
     "application/rtf" to ".rtf",
 )
 
+val fileList: List<String> = listOf(
+    "doc",
+    "docx",
+    "rtf",
+    "ppt",
+    "pptx",
+    "xls",
+    "xlsx",
+    "xisx",
+    "xlsm",
+    "csv",
+    "pdf",
+    "txt",
+    "epub",
+    "chm"
+)
+
 fun URLConnection.fileExt(): String {
-    var type = this.contentType
-    if(type.contains(";")){
-        type = type.substring(0,type.indexOf(";"))
+    var suffix = FileUtils.getFileType(this.url.toString())
+    //如果url获取的格式支持 则直接返回，否则根据suffix来判断
+    if (fileList.contains(suffix)) {
+        Log.d("FileUtils===>", "文件格式 从url获取==>.$suffix")
+        return ".$suffix"
     }
-    Log.d("FileUtils===>", "文件格式==>$type")
+    var type = this.contentType
+    if (type.contains(";")) {
+        type = type.substring(0, type.indexOf(";"))
+    }
+    Log.d("FileUtils===>", "文件格式 从contentType获取==>${contentTypeList[type]}")
     return contentTypeList[type]!!
 }
