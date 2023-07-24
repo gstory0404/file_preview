@@ -13,6 +13,7 @@
 ## 简介
 
 使用file_preview可以像在使用Flutter weidget一样在andorid、ios页面中预览doc、docx、rtf、ppt、pptx、xls、xlsx、xlsm、csv、pdf、txt、epub、chm等文件。
+[演示app](https://www.pgyer.com/file_preview)
 
 ## 说明
 * andorid使用腾讯[TBS](https://cloud.tencent.com/product/tbs)服务，支持doc、docx、rtf、ppt、pptx、xls、xlsx、xlsm、csv、pdf、txt、epub、chm文件的预览
