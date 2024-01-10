@@ -56,17 +56,25 @@ android {
     }
 }
 
-//repositories {
+repositories {
 //    flatDir {
 //        dirs 'libs'
 //    }
-//}
-
+    maven {
+        url = uri("https://raw.github.com/vickyleu/wemeet_maven/main/")
+    }
+}
+configurations.configureEach {
+    exclude group:"com.tencent.tbs",module:"tbssdk"
+    exclude group:"com.tencent.wemeet.third-party",module:"tbssdk-dynamic"
+}
 dependencies {
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
     compileOnly "io.flutter:flutter_embedding_debug:1.0.0-c08d7d5efc9aa6eb3c30cfb3be6dc09bca5e7631"
 //    tbsfile
     api "com.tencent.tbs:tbsfile:1.0.5"
+//    implementation("com.tencent.wemeet.third-party:tbssdk-dynamic:3.6.302.18")
+    implementation "com.tencent.wemeet.third-party:tbssdk:3.12.401.11"
 //    implementation 'com.gitee.VickyLeu:uooc_flutter_repo:-SNAPSHOT'
 //    task useAar 用于生成本地maven
 

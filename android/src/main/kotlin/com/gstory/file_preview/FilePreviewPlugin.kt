@@ -15,7 +15,7 @@ import io.flutter.plugin.common.MethodChannel.MethodCallHandler
 import io.flutter.plugin.common.MethodChannel.Result
 
 
-/** FilePreviewPlugin */
+@Suppress("UNUSED")
 class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
 
     private var applicationContext: Context? = null
@@ -26,8 +26,8 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
     override fun onAttachedToActivity(binding: ActivityPluginBinding) {
         mActivity = binding.activity
         mFlutterPluginBinding?.platformViewRegistry?.registerViewFactory(
-                "com.gstory.file_preview/filePreview",
-                FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
+            "com.gstory.file_preview/filePreview",
+            FilePreviewFactory(mFlutterPluginBinding?.binaryMessenger!!, mActivity!!)
         )
 
     }
@@ -59,10 +59,37 @@ class FilePreviewPlugin : FlutterPlugin, MethodCallHandler, ActivityAware {
             val license = call.argument<String>("license")
             TbsFileInterfaceImpl.setLicenseKey(license)
             TbsFileInterfaceImpl.fileEnginePreCheck(mActivity)
-            var isInit = TbsFileInterfaceImpl.initEngine(applicationContext)
-            Log.d("=====>", "初始化 $isInit")
-            result.success(isInit == 0)
-        }else if(call.method == "tbsHasInit"){
+            if (!TbsFileInterfaceImpl.isEngineLoaded()) {
+                val isInit = TbsFileInterfaceImpl.initEngine(applicationContext)
+                val map = mutableMapOf<String, String>(
+                    "102" to "未设置 licenseKey。",
+                    "202" to "请检查调用接口是否正确，应调用 setLicenseKey 接口而不是 setLicense 接口。",
+                    "103" to "1. 请检查设备网络是否连通。\n" +
+                            "2. 尝试切换网络。",
+                    "305" to "1. 请检查设备网络是否连通。\n" +
+                            "2. 尝试切换网络。",
+                    "212" to "调用量包次数用完。",
+                    "322" to "调用量包次数用完。",
+                    "4001" to "licenseKey 不存在，请检查设置的 licenseKey 是否正确。",
+                    "4002" to "客户端包名和 licenseKey 不匹配。",
+                )
+                if (isInit != 0) {
+                    val value = map[isInit.toString()]
+                    if (value != null) {
+                        Log.d("=====>", "初始化错误:${value}")
+                        result.error(isInit.toString(), value, null)
+                    } else {
+                        result.success(false)
+                    }
+                    return
+                }
+                Log.d("=====>", "初始化成功")
+                result.success(true)
+            } else {
+                Log.d("=====>", "初始化 isEngineLoaded false")
+                result.success(false)
+            }
+        } else if (call.method == "tbsHasInit") {
             val ret = TbsFileInterfaceImpl.initEngine(applicationContext)
             result.success(ret == 0)
         } else if (call.method == "tbsVersion") {
