@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'dart:typed_data';
 
 import 'package:file_picker/file_picker.dart';
 import 'package:file_preview_example/file_preview_page.dart';
@@ -37,7 +38,7 @@ class _HomePageState extends State<HomePage> {
   }
 
   void _initTBS() async {
-    isInit = await FilePreview.initTBS(license: "your license");
+    isInit = await FilePreview.initTBS(license: "JKP9yE+c5Pj6JIbAe55x0LUOFrD1wz/u+jle60hO5nIJeU8XLTwbIGouFZYWSqeDg2MYrgj9++zqQo1+K9B3zA==");
     version = await FilePreview.tbsVersion();
     if (mounted) {
       setState(() {});
@@ -83,6 +84,24 @@ class _HomePageState extends State<HomePage> {
                 );
               },
             ),
+            // MaterialButton(
+            //   color: Colors.blue,
+            //   textColor: Colors.white,
+            //   child: const Text('Assets文件预览'),
+            //   onPressed: () async {
+            //     Navigator.push(
+            //       context,
+            //       MaterialPageRoute(
+            //         builder: (_){
+            //           return FilePreviewPage(
+            //             title: "本地文件预览",
+            //             path: "assets/file_ceshi.docx",
+            //           );
+            //         },
+            //       ),
+            //     );
+            //   },
+            // ),
             MaterialButton(
               color: Colors.blue,
               textColor: Colors.white,

@@ -52,11 +52,20 @@ object FileUtils {
         if (TextUtils.isEmpty(paramString)) {
             return str
         }
+        //读取文件格式
         val i = paramString.lastIndexOf('.')
         if (i <= -1) {
             return str
         }
         str = paramString.substring(i + 1)
+        //如果存在？参数则移除参数
+        if(str.contains("?")){
+            val j = str.lastIndexOf('?')
+            if (j <= -1) {
+                return str
+            }
+            str = str.substring(0,j)
+        }
         return str
     }
 
@@ -65,7 +74,7 @@ object FileUtils {
      */
     fun downLoadFile(context: Context, downloadUrl: String, callback: DownloadCallback) {
         var saveFile : File? = null
-        Log.e("saveFile===+>","$downloadUrl")
+        Log.e("saveUrl===+>","$downloadUrl")
         Thread {
             // 流和链接
             var inputStream: InputStream? = null
@@ -84,7 +93,7 @@ object FileUtils {
                 connection?.connect();
                 //储存文件
                 saveFile =
-                    File("${getDir(context)}${File.separator}${downloadUrl.hashCode()}${connection?.fileExt()}")
+                    File("${getDir(context)}${File.separator}${downloadUrl.hashCode()}_preview${connection?.fileExt()}")
                 Log.e("saveFile===+>","$saveFile")
                 //如果文件已存在 不再下载 直接读取展示
                 if (saveFile!!.exists()) {

@@ -60,9 +60,9 @@ val fileList: List<String> = listOf(
 
 fun URLConnection.fileExt(): String {
     var suffix = FileUtils.getFileType(this.url.toString())
+    Log.d("FileUtils===>", "文件格式 从url获取==>.$suffix")
     //如果url获取的格式支持 则直接返回，否则根据suffix来判断
     if (fileList.contains(suffix)) {
-        Log.d("FileUtils===>", "文件格式 从url获取==>.$suffix")
         return ".$suffix"
     }
     var type = this.contentType

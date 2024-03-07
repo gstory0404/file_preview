@@ -48,7 +48,7 @@ class _FilePreviewPageState extends State<FilePreviewPage> {
             children: [
               TextButton(
                 onPressed: () {
-                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.docx");
+                  controller.showFile("https://gstory.vercel.app/ceshi/ceshi.docx?a=1&b=123");
                 },
                 child: Text("docx"),
               ),
